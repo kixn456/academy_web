@@ -1,0 +1,488 @@
+/**
+ * Created by Administrator on 2017/10/26.
+ *@description
+ *@author
+ *@out
+ */
+
+/**
+ * Created by Administrator on 2017/10/21.
+ *@description
+ *@author
+ *@out
+ */
+
+export const CourseListData={
+    result:0,
+    responseInfo: {
+            courseList:[{
+                courseId: '52852',
+                title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                category: 'javascript',
+                expireDate: '2019-01-30',
+                originalPrice: '358.00',
+                realPrice: '258.00',
+                searchKeys: '1000000',
+                fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                courseAvatar: 'images/courseImg/product12.jpg',
+                difficultyLevel: 'PHP初级',
+                teacherName:'刘德华'
+       },
+                {
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/2.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                }
+                ,{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/3.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/4.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                }
+                ,{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/5.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/6.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/7.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/6.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/7.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/6.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/7.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/6.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/7.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/6.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/7.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/6.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/7.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/6.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/7.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/6.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/7.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/6.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/7.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/6.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/7.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/6.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/7.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/6.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/7.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/6.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/7.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/6.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/7.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/6.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                },{
+                    courseId: '100000',
+                    title: 'DW网页WEB前端开发html/css/js实战特训试学体验直播课-51RGB',
+                    courseInfo: "Javascript发展越来越快，并且将触角延伸到各个领域，几乎有一统江湖之势。无论是前端，后台服务器，移动开发，Javascript无不占据着重要位置，学习和使用Javascipt这门编程语言是性价比最高的，学习Javascript算法也相当重要的",
+                    category: 'javascript',
+                    expireDate: '2019-01-30',
+                    originalPrice: '358.00',
+                    realPrice: '258.00',
+                    searchKeys: '1000000',
+                    fitPeople: '学习该课程需要熟悉PHP语法基础，了解PHP的基本使用',
+                    courseAvatar: 'images/products/7.jpg',
+                    difficultyLevel: 'PHP初级',
+                    teacherName:'刘德华'
+                }],
+        pageInfo:{
+            pageNo:1,
+            pageSize:10,
+            currentPage:1,
+            totalPage:20,
+            totalNo:100
+        }
+    }
+};
+
+
+

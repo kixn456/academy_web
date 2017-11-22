@@ -1,0 +1,96 @@
+export const ClassList={
+    "code": 0,
+    "message": "ok",
+    responseInfo:{
+        "list": [
+            {
+                id:100,
+                name:'前端开发',
+                child:[
+                    {
+                        id:101,
+                        name:'React'
+                    },
+                    {
+                        id:102,
+                        name:'Angular'
+                    }
+                ]
+            },
+            {
+                id:2000,
+                name:'后端开发',
+                child:[
+                    {
+                        id:201,
+                        name:'java',
+                    },
+                    {
+                        id:202,
+                        name:'Redis',
+                    }
+                ]
+            },
+            {
+                id:300,
+                name:'移动开发',
+                child:[
+                    {
+                        id:301,
+                        name:'Android',
+                    },
+                    {
+                        id:302,
+                        name:' OBJECT-C',
+                    }
+                ]
+            },
+            {
+                id:400,
+                name:'数据库',
+                child:[
+                    {
+                        id:401,
+                        name:'Orical',
+                    },
+                    {
+                        id:402,
+                        name:'MySql',
+                    }
+                ]
+            },
+            {
+                id:500,
+                name:'云计算&大数据',
+                child:[
+                    {
+                        id:501,
+                        name:'paython',
+                    }
+                ]
+            },
+            {
+                id:600,
+                name:'UI设计',
+                child:[
+                    {
+                        id:601,
+                        name:'photoshop',
+                    }
+                ]
+            },
+            {
+                id:700,
+                name:'人工智能',
+                child:[
+                    {
+                        id:701,
+                        name:'react',
+                    }
+                ]
+            }
+
+        ]
+    }
+
+}
