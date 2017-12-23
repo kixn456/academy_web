@@ -18,25 +18,29 @@ import CourseList from './course/courseList';
 import QuestionList from './question/index';
 
 import BounsList from './bouns/index';
-
+import Footer from "../inc/foot/footer"
 export default class MainFrame extends Component{
     render(){
         return (
-            <div style={{background:'#eee'}}>
-                <UserHeader/>
-                <div style={{background:'#eee',paddingTop:'20px',marginTop:'60px'}}>
+            <di>
+                <div className="headerTop">
+                    <UserHeader/>
+                </div>
+
+                <div style={{paddingTop:'20px',marginTop:'60px'}}>
                 <Grid>
                     <div className='leftMenu'>
                         <LeftMenu menuData={leftMenuData.StudyCente} isRouter={true}  menuItemClickFn={(routerName)=>this.menuItemClickFn(routerName)}/>
                     </div>
                     <div className='content_main'>
-                        <Col>
+                        <Col md={12} style={{padding:0}}>
                             {this.props.children}
                         </Col>
                     </div>
                 </Grid>
                 </div>
-            </div>
+                <Footer/>
+            </di>
 
         )
     }

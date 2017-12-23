@@ -12,10 +12,10 @@ export default class HeaderMenu extends Component {
     jumpTo(url){
 
         let loginFlag=Storage.get("loginFlag");
-        if(loginFlag){
+        if(loginFlag || (url==basePath+"index.html")){
             location.href=url;
         }else{
-            alert("请登录");
+            this.props.loginModalControl();
         }
 
     }

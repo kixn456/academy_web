@@ -9,14 +9,22 @@
 import React, {Component} from 'react';
 import {Grid,Row,Col,Thumbnail,Button} from "react-bootstrap";
 import * as StudyServer from '../../server/studyCenterServer';
-
-
+import * as Commom from "../../public/commom/commom";
+import Storage from '../../common/storeage';
+const basePath=Commom.getRootPath();
 
 export default class CourseList extends Component {
     constructor(props) {
         super(props);
         this.state={
-
+            pageInfo:{
+                userId:"",
+                category:'ubuyer',
+                startCreateTime:'2017-12-01 00:00:00', //查询用户的已购买的课程信息，开始时间与结束时间固定写死
+                endCreateTime:'2017-12-30 00:00:01',
+                pageSize:10,
+                pageNum:1
+            },
             courseList:[],
             taskList:[]
         }
@@ -30,14 +38,16 @@ export default class CourseList extends Component {
    }
 
    initData(){
-       let userId=123;
+       let userInfo=Storage.get("userInfo");
+       let userId=userInfo.userId;
        let _self=this;
-       StudyServer.getAjaxCourseListWithUser(userId,function(data){
-            console.log(data);
-            if(data.result==0){
+       let pageInfo=_self.state.pageInfo;
+       pageInfo.userId=userId;
+       StudyServer.getAjaxBuyerCourseListWithUser(userId,pageInfo,function(code,data){
+
+            if(code==0){
                 _self.setState({
-                    courseList:data.responseInfo.courseList,
-                    taskList:data.responseInfo.taskList
+                    courseList:data.list
                 })
             }
 
@@ -45,47 +55,55 @@ export default class CourseList extends Component {
            console.log("异常错误")
        })
    }
+    gotoDetail(id){
+       location.href=basePath+"courseDetail.html?id="+id;
+    }
     render() {
             let _self=this;
             let courseList=this.state.courseList;
         return (
 
-                <Col>
+                <div  className="demo">
                     {
                         ( courseList.length>0)
                         ?
                         courseList.map(function(item,index){
-                            return (
+                            let orderData=JSON.parse(item.orderData);
+                            let photoName=Commom.formatServerPhoto(orderData.courseAvatar);
 
-                                <Col xs={6} md={4} key={index}>
-                                    <Thumbnail src={"../"+item.imgUrl} alt="242x200">
-                                        <h3> {item.title}</h3>
+                            return(
+                                <div  className="myColLi" key={index} >
+                                    <div><img src={photoName.middlePhoto}  />
+                                        <div className="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{width:'60%',height:'5px',verticalAlign:'text-top',background:'green'}}>
+                                            60%
+                                        </div>
+                                    </div>
+                                    <div>
                                         {
+
                                             (_self.currentRouter!='myCollection')
-                                            ?
+                                                ?
                                                 <Col>
-                                                    <div className="progress" style={{height:'5px',marginTop:'10px'}}>
-                                                        <div className="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{width:'60%',height:'5px'}}>
-                                                            60%
-                                                        </div>
-                                                    </div>
-                                                    <div><Button bsStyle="success">继续学习</Button><span style={{float:'right'}}>学习进度：2/7</span></div>
+
+                                                    <div style={{clear:'both',lineHeight:'40px',color:'#999'}}>{orderData.title}</div>
+                                                    <div  style={{fontSize:'12px',padding:0}}><Button bsStyle="success" onClick={()=>_self.gotoDetail(orderData.courseId)} style={{float:'right',padding:'0px 10px',borderRadius:0,background:'green',fontSize:'12px'}}>继续学习</Button><span style={{float:'left'}}>已学习：2/7</span></div>
                                                 </Col>
                                                 :
                                                 <Col>
                                                     <div>难度级别：{item.level}</div>
                                                 </Col>
-                                        }
 
-                                    </Thumbnail>
-                                </Col>
+                                        }
+                                    </div>
+
+                                </div>
                             )
                         })
                             :
                             null
 
                     }
-                </Col>
+                </div>
 
         )
     }

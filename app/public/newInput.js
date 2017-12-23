@@ -29,9 +29,9 @@ export default class NewInput extends Component {
 
                         (!_self.props.rows||_self.props.rows<=1)
                             ?
-                            <Input required={_self.props.required}  value={this.props.defaultValue} name={this.props.name}  placeholder={this.props.placeholder} onChange={(e)=>this.props.onChange(e)} />
+                            <Input id={_self.props.id} required={_self.props.required}  value={this.props.defaultValue} name={this.props.name}  placeholder={this.props.placeholder} onChange={(e)=>this.props.onChange(e)} />
                             :
-                            <TextArea rows={_self.props.row} value={this.props.defaultValue}  name={_self.props.name}  placeholder={this.props.placeholder} onChange={(e)=>this.props.onChange(e)}/>
+                            <TextArea id={_self.props.id} rows={_self.props.rows} value={this.props.defaultValue}  name={_self.props.name}  placeholder={this.props.placeholder} onChange={(e)=>this.props.onChange(e)}/>
 
                     }
 

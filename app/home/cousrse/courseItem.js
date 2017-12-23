@@ -3,17 +3,20 @@
  */
 import React,{ Component } from 'react';
 import {Grid,Row,Col,Image} from "react-bootstrap";
+import * as Commom from '../../public/commom/commom';
 import Star from '../../common/star';
 export default class CourseItem extends Component {
     render(){
         let montyType="￥";
         let price=(this.props.dataSource.realPrice>0)?montyType+this.props.dataSource.realPrice:<span className='colorGreen'>免费</span>;
-
+        let photoName=Commom.formatServerPhoto(this.props.dataSource.courseAvatar);
         return(
 
             <div className="courseItem">
-                <div style={{background:'white',textAlign:'center'}}>
-                    <a href={"courseDetail.html?id="+this.props.dataSource.id}><Image src={this.props.dataSource.imgUrl} style={{maxHeight:'140px',margin:'0px auto'}}  /></a>
+                <div style={{background:'white',textAlign:'center',height:'140px'}}>
+                    <a href={"courseDetail.html?id="+this.props.dataSource.courseId}>
+                        <Image src={photoName.middlePhoto} style={{maxHeight:'140px',margin:'0px auto'}}  />
+                    </a>
                 </div>
 
                 <div className="courseItem_p">

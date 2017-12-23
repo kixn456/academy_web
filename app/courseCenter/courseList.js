@@ -13,10 +13,11 @@ class CourseList extends Component{
     render() {
         return (
             <div>
-                <HomeMain/>
+                <div className="headerTop">
+                     <HomeMain/>
+                </div>
                 <CourseListBySearch/>
             </div>
-
         )
     }
 

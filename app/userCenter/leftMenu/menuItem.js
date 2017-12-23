@@ -18,8 +18,8 @@ export default class LeftMenu extends Component {
     }
     componentDidMount(){
         //console.log(this.props.menuData);
-    }
 
+}
     render() {
         let menuData=this.props.menuData;
         let _self=this;
@@ -37,7 +37,7 @@ export default class LeftMenu extends Component {
                                     {
                                         (_self.props.isRouter)
                                         ?
-                                        <Link to={item.url} activeStyle={{color: 'white',background:'rgba(0,0,0,.4)',display:'block'}}>{item.name}</Link>
+                                        <Link to={item.url} style={{color:'#000'}} activeStyle={{color: '#51CA1C',fontWeidth:'bold',display:'block'}}>{item.name}</Link>
                                         :
                                         <a href={item.url}> {item.name}</a>
                                     }

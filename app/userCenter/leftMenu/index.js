@@ -5,6 +5,9 @@
 import React, {Component} from 'react';
 import MenuItem from './menuItem';
 import {Image} from "react-bootstrap";
+import * as Commom from '../../public/commom/commom';
+
+const basePath=Commom.getRootPath();
 export default class LeftMenu extends Component {
     constructor(props) {
         super(props);
@@ -16,7 +19,7 @@ export default class LeftMenu extends Component {
         return (
             <div>
                 <div style={{textAlign:'center',clear:'both',marginTop:'30px'}}>
-                    <Image  src={"../images/symbol/aze.jpg"} width={80} circle  style={{margin:'0px auto',border:'5px solid #fff'}}/>
+                    <Image  src={basePath+"images/symbol/aze.png"} width={60} circle  style={{margin:'0px auto',border:'5px solid #fff'}}/>
                 </div>
                 <p className='iconList' style={{textAlign:'center'}}>
                     <span className='glyphicon glyphicon-user'></span>
@@ -24,7 +27,8 @@ export default class LeftMenu extends Component {
                     <span className='glyphicon glyphicon-envelope'></span>
                     <span className='glyphicon glyphicon-wrench'></span>
                 </p>
-                <MenuItem  menuData={this.props.menuData} isRouter={this.props.isRouter}  menuItemClickFn={(routerIndex)=>this.props.menuItemClickFn(routerIndex)} />
+                <div style={{textAlign:'center',fontWeight:'bold',borderBottom:'1px solid #ccc'}}>{this.props.title}</div>
+                <MenuItem   menuData={this.props.menuData} isRouter={this.props.isRouter}  menuItemClickFn={(routerIndex)=>this.props.menuItemClickFn(routerIndex)} />
             </div>
         )
     }

@@ -32,10 +32,7 @@ export const UserCenter=[
 
 //教学中心
 export const TeachCenter=[
-    {
-        name:'教学中心',
-        url:'TeachCenter'
-    },
+
     {
         name:'课程管理',
         url:'CourseMananger'

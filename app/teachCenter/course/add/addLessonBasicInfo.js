@@ -7,6 +7,7 @@ import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox,Button
 import { DatePicker } from 'antd';
 import 'antd/dist/antd.css';
  import {isEmptyObject} from "../../../public/commom/commom";
+ import {UploadImg} from '../../../public/uploaImg'
 import moment from 'moment';
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
@@ -16,7 +17,7 @@ import  * as ClassData from '../../../testData/classData';
 import {CoustomInput} from '../../../public/newInput';
 const FormItem = Form.Item;
 const Option = Select.Option;
-const ClassList=ClassData.ClassList.responseInfo.list;
+const ClassList=ClassData.ClassList;
 const RadioGroup = Radio.Group;
 
 
@@ -25,8 +26,11 @@ const RadioGroup = Radio.Group;
         super(props);
         let defaultState=this.initState();
         let  newCourseInfo=Object.assign({},this.props.dataSource);
-        if(newCourseInfo.category==""){
-            newCourseInfo.category=ClassList[0].id
+        if(typeof(newCourseInfo.category)=="object")
+        {
+            newCourseInfo.category=this.props.dataSource.category;
+        }else{
+            newCourseInfo.category={id:ClassList[0].id,name:ClassList[0].name,child:{id:ClassList[0].child[0].id,name:ClassList[0].child[0].name}}
         }
 
         this.state={
@@ -34,7 +38,9 @@ const RadioGroup = Radio.Group;
             isFreeTime:true,
             courseInfo:newCourseInfo,
             errorInfo:Object.assign({},defaultState),
-            errorClass:Object.assign({},defaultState)
+            errorClass:Object.assign({},defaultState),
+            activeCategory:ClassList[0].child,
+
         }
     }
 
@@ -43,8 +49,11 @@ const RadioGroup = Radio.Group;
                 courseId:'',
                 title:'',
                 category:'',//课程分类或/分类ID，
+                courseAvatar:'',
                 expireDate:'2099-12-30 00:00:00',
-                originalPrice:''
+                originalPrice:'',
+                realPrice:''
+
         };
         return defaultState;
     }
@@ -60,14 +69,38 @@ const RadioGroup = Radio.Group;
                  courseInfo:dataSource
              })
          }*/
+
      }
 
      componentWillReceiveProps(nextProps){
 
          if(nextProps.dataSource!=this.props.dataSource){
+
+             let myData=this.findSelectedIndex(nextProps.dataSource.category.id,ClassList);
+             let originalPrice=nextProps.dataSource.originalPrice;
+             let expireDate=nextProps.dataSource.expireDate;
+             let isFreeCharge=true;
+             let isFreeTime=true;
+
+
+             if(originalPrice>0){
+                 isFreeCharge=false;
+             }
+
+             console.log(expireDate);
+             if(expireDate!='2099-12-30 00:00:00'){
+                 isFreeTime=false;
+             }
+
+
+
                this.setState({
-                   courseInfo:nextProps.dataSource
-               })
+                   courseInfo:nextProps.dataSource,
+                   activeCategory:myData.child,
+                   isFreeTime:isFreeTime,
+                   isFreeCharge:isFreeCharge
+               });
+
          }
      }
 
@@ -80,7 +113,7 @@ const RadioGroup = Radio.Group;
            courseInfo[stateName]=stateValue;
            let checkResult=this.checkCourseInfo(courseInfo);
            let isEmpty=isEmptyObject(checkResult);
-            let errorClass={};
+         let errorClass={};
 
              if(!isEmpty){
 
@@ -195,10 +228,7 @@ const RadioGroup = Radio.Group;
          let isFreeCharge=state.isFreeCharge;
          let isFreeTime=state.isFreeTime;
          let courseInfo=state.courseInfo;
-        /* console.log("************************");
-         console.log(courseInfo);
-         console.log("***********");
-         return;*/
+
          //是否免费价格
          if(isFreeCharge)
          {
@@ -224,18 +254,76 @@ const RadioGroup = Radio.Group;
              return
          }
 
+
          //提交校验
          this.props.submitCallBack(courseInfo);
 
 
      }
+
+     chooseSelectCateory(obj){
+
+         let courseInfo=this.state.courseInfo;
+         let category=courseInfo.category;
+         let id=obj.value;
+         let newCategory=null;
+
+            if(obj.name=="category")
+            {
+
+                newCategory=this.findSelectedIndex(id,ClassList);
+                category={id:newCategory.id,name:newCategory.name,child:{id:newCategory.child[0].id,name:newCategory.child[0].name}};
+                courseInfo.category=category;
+
+                this.setState({
+                    activeCategory:newCategory.child,
+                    courseInfo:courseInfo
+                })
+
+            }else{
+
+                newCategory=this.findSelectedIndex(id,this.state.activeCategory);
+
+                category.child={id:newCategory.id,name:newCategory.name};
+                courseInfo.category=category;
+
+                this.setState({
+                   courseInfo:courseInfo
+                })
+            }
+     }
+     uploadCallBack(imgPath){
+
+         let courseInfo=this.state.courseInfo;
+         courseInfo.courseAvatar=imgPath;
+         this.setState({
+             courseInfo:courseInfo
+         })
+     }
+
+     findSelectedIndex(id,data){
+
+         let newData=[];
+
+         for(var i=0;i<data.length; i++){
+             if(data[i].id==id){
+                 newData=data[i]
+                 break;
+             }
+         }
+         return newData;
+     }
+
     render() {
         let defaultTime=new Date();
         let courseInfo=this.state.courseInfo;
         let errorClass=this.state.errorClass;
         let isFreeCharge=this.state.isFreeCharge;
         let isFreeTime=this.state.isFreeTime;
+        let childLst=this.state.activeCategory;
+        let category=courseInfo.category;
 
+        console.log(isFreeTime)
         return (
             <div style={{marginTop:'20px'}}>
                 <Col span={24} className='formItem_bottom' offset={2}>
@@ -252,31 +340,49 @@ const RadioGroup = Radio.Group;
                         {I18N.I18N_TEATCH_CENTER.category}
                     </Col>
                     <Col span={10} offset={1}>
-                        <Select name="category" size={'large'} defaultValue={courseInfo.category.toString()} style={{width:"100%"}} onSelect={(value)=>this.chooseSelect({"name":'category',"value":value})}>
+                        {/****级联下拉选择框**/}
+                        <Select name="category" size={'large'} value={category.id.toString()}  style={{width:"49%",float:'left'}} onSelect={(value)=>this.chooseSelectCateory({"name":'category',"value":value})}>
                             {
                                 ClassList.map(function(item,index){
                                     return  <Option value={(item.id).toString()} key={index}>{item.name}</Option>
                                 })
                             }
                         </Select>
+                        <Select name="child" size={'large'}  value={category.child.id} style={{width:"49%",float:'left',marginLeft:'4px'}} onSelect={(value)=>this.chooseSelectCateory({"name":'child',"value":value})}>
+                            {
+                                childLst.map(function(item,index){
+                                    return  <Option value={(item.id)} key={index}>{item.name}</Option>
+                                })
+                            }
+                        </Select>
                     </Col>
                 </Col>
+
+
+
                 <Col span={24} className='formItem_bottom' offset={2}>
                     <Col className="text-right ant-form-item-required" span={4} >
                         {I18N.I18N_TEATCH_CENTER.originalPrice}
                     </Col>
                     <Col span={18} offset={1}>
-                        <RadioGroup size={'large'} name="isFreeCharge" defaultValue={isFreeCharge} onChange={this.checkPriceAndTimeRadio.bind(this)}>
+                        <Col>
+                        <RadioGroup size={'large'} name="isFreeCharge" value={isFreeCharge} onChange={this.checkPriceAndTimeRadio.bind(this)}>
                             <Radio  value={true}> {I18N.I18N_TEATCH_CENTER.Free}</Radio>
                             <Radio value={false}>{I18N.I18N_TEATCH_CENTER.NOT_FREE}</Radio>
                         </RadioGroup>
+                        </Col>
+                        <Col span={18} style={{marginTop:'10px'}}>
                         {
                             !this.state.isFreeCharge
                                 ?
-                                <Input size={'large'} name='originalPrice' style={{ width: '236px' }} onChange={(e)=>this.inputChangeHandle(e)}  />
+                                <Col>
+                                    <span style={{padding:'0px 10px'}}>原始价格：</span><Input size={'large'} value={courseInfo.originalPrice} name='originalPrice' style={{ width: '100px' }} onChange={(e)=>this.inputChangeHandle(e)}  />
+                                    <span style={{padding:'0px 10px'}}>折扣价格：</span><Input size={'large'} value={courseInfo.realPrice} name='realPrice' style={{ width: '100px' }} onChange={(e)=>this.inputChangeHandle(e)}  />
+                                </Col>
                                 :
                                 null
                         }
+                        </Col>
                     </Col>
                 </Col>
 
@@ -285,7 +391,7 @@ const RadioGroup = Radio.Group;
                         {I18N.I18N_TEATCH_CENTER.expireDate}
                     </Col>
                     <Col span={18} offset={1}>
-                        <RadioGroup name="isFreeTime" defaultValue={isFreeTime} onChange={this.checkPriceAndTimeRadio.bind(this)}>
+                        <RadioGroup name="isFreeTime"  value={isFreeTime} onChange={this.checkPriceAndTimeRadio.bind(this)}>
                             <Radio value={true}>永久有效</Radio>
                             <Radio value={false}>指定日期</Radio>
                         </RadioGroup>
@@ -298,6 +404,17 @@ const RadioGroup = Radio.Group;
                         }
                     </Col>
                 </Col>
+
+                <Col span={24} className='formItem_bottom' offset={2}>
+                    <Col className="text-right ant-form-item-required" span={4} >
+                        {I18N.I18N_TEATCH_CENTER.CLASS_courseAvatar}
+                    </Col>
+                    <Col span={18} offset={1}>
+                        <UploadImg photoPath={courseInfo.courseAvatar} uploadCallBack={(imgPath)=>this.uploadCallBack(imgPath)} />
+                    </Col>
+                </Col>
+
+
                 <Col span={24} className='formItem_bottom' offset={6}>
                     <Button type="primary"  onClick={this.addCourseStepSubmit.bind(this)}>下一步</Button>
                 </Col>

@@ -16,7 +16,7 @@ export default class LoginForm extends Component {
         super(props);
         let defaultState=this.initDefaultState();
         this.state = {
-        		loginData:defaultState,
+        		loginData:Object.assign({},defaultState),
         		errorMsg:''
         };
         this.loginSubmit=this.loginSubmit.bind(this);
@@ -36,7 +36,6 @@ export default class LoginForm extends Component {
     {
         //这里的stateKey必须与初始state状态管理器中的key保持一持否则无法改值
         let loginData=this.state.loginData;
-
         loginData[stateKey]=this[stateKey].value;
         this.setState({loginData:loginData});
     }
@@ -65,19 +64,22 @@ export default class LoginForm extends Component {
                         {
                             //回调通知父组件
                             Storage.set("userInfo",data);
-                            console.log("login success!");
                             _self.props.callHandle({loginSuccss:true});
+                        }else{
+                            Storage.set("loginFlag",false);
+                            _self.setState({
+                                errorMsg:ErrorMSG[code]
+                            })
                         }
-
-                        _self.setState({
-                            errorMsg:ErrorMSG[code]
-                        })
                     });
 
                 }
             },
             function error(xhr,testStatus){
 
+                _self.setState({
+                    errorMsg:ErrorMSG["-1"]
+                })
             });
 
     }
@@ -98,7 +100,7 @@ export default class LoginForm extends Component {
                 </FormGroup>
                 {/*phoneNumber**/}
                 <FormGroup controlId="formHorizontalUserName">
-                    <Col componentClass={ControlLabel} sm={3}>
+                    <Col componentClass={ControlLabel} sm={3} style={{display:'none'}}>
                         {I18N_LOGIN.MOBILE_Number}：
                     </Col>
                     <Col smOffset={2} sm={8}>

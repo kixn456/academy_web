@@ -14,7 +14,7 @@ import UserInfo from './userInfo/UserInfo'
 import AccountBind from './account/accountBind';
 import * as leftMenuData from '../config/config_userCenter';
 import LeftMenu from './leftMenu/index';
-
+import Footer from "../inc/foot/footer"
 import {Router,IndexRoute, Route, Link, hashHistory } from 'react-router';
 
 
@@ -40,11 +40,12 @@ export default class MainPage extends Component{
     render () {
         return (
             <div>
-                <UserHeader/>
-
+                <div className="headerTop">
+                    <UserHeader/>
+                </div>
                 <Grid style={{marginTop:'80px'}}>
                     <div className='leftMenu'>
-                        <LeftMenu menuData={leftMenuData.UserCenter} isRouter={true}  menuItemClickFn={(routerName)=>this.menuItemClickFn(routerName)}/>
+                        <LeftMenu  title="用户中心" menuData={leftMenuData.UserCenter} isRouter={true}  menuItemClickFn={(routerName)=>this.menuItemClickFn(routerName)}/>
                     </div>
                     <div className='content_main'>
                         <Col>
@@ -52,6 +53,7 @@ export default class MainPage extends Component{
                         </Col>
                     </div>
                 </Grid>
+                <Footer/>
             </div>
         )
     }

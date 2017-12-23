@@ -19,7 +19,7 @@ export default class CourseClassify extends Component {
         return(
             <Grid style={{position:'absolute',top:'0',left:0}}>
                 <Col className="menuBox">
-                    <ClassItem dataSource={ClassList.responseInfo.list}/>
+                    <ClassItem dataSource={ClassList}/>
                 </Col>
             </Grid>
 

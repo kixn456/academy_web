@@ -4,6 +4,7 @@
 import React, { Component } from 'react';
 import {Row,Col,Image,OverlayTrigger,Popover,ButtonToolbar,Button} from "react-bootstrap";
 import * as Commom from '../public/commom/commom';
+import  Stroage from '../common/storeage';
 const basePath=Commom.getRootPath();
 export default class LoginSuccess extends Component {
     constructor(props) {
@@ -11,12 +12,17 @@ export default class LoginSuccess extends Component {
     }
 
     goto(pageName){
-
         //
         let pageUrl='';
         switch(pageName){
             case 'teachCenter':
-                pageUrl='teachCenter/index.html';
+                pageUrl=basePath+'teachCenter/index.html';
+                break;
+            case 'studyCenter':
+                pageUrl=basePath+'studyCenter/index.html';
+                break;
+            case 'userCenter':
+                pageUrl=basePath+'userCenter/index.html';
                 break;
         }
         location.href=pageUrl;
@@ -28,23 +34,26 @@ export default class LoginSuccess extends Component {
     }
     render()
     {
+        let userInfo=Stroage.get("userInfo");
+        //let userName=userInfo.username;
+        console.log(userInfo);
       return(
             <Col>
             <Col>
                 <Image  src={basePath+"images/symbol/aze.jpg"} width={60 } circle  style={{float:'left',marginTop:0}}/>
                 <span style={{float:'left',marginLeft:"20px",marginTop:10}}>
-                            欢迎您！18500788688<br/>
+                            欢迎您！{userInfo.loginId.replace(userInfo.countryCode,"")}<br/>
                             帐户积分:100
                         </span>
             </Col>
             <div className="clearfix"></div>
         <Col>
             <ButtonToolbar style={{ padding: '10px 30px' }}>
-                <Button>帐户管理</Button>
-                <Button>学习中心</Button>
+                <Button >帐户管理</Button>
+                <Button  onClick={()=>this.goto('studyCenter')}>学习中心</Button>
                 <div className="clearfix" style={{marginBottom:"10px"}}></div>
                 <Button onClick={()=>this.goto('teachCenter')}>教学中心</Button>
-                <Button>帐户中心</Button>
+                <Button　onClick={()=>this.goto('userCenter')}>用户中心</Button>
             </ButtonToolbar>
             <Button bsStyle='warning' block onClick={()=>this.logoutCallBack()}>退出登录  </Button>
         </Col>

@@ -3,8 +3,8 @@
  */
 
 import React, {Component} from 'react';
-import { Form,Button,Icon} from 'antd';
-
+import { Form,Button,Icon, Popconfirm, message } from 'antd';
+import * as CourseServer from '../../../server/courseCenterServer';
 import ChapterItem from './addChapterInfo'
 import * as I18N from '../../../i18n/i18n_teachCenter';
 
@@ -15,6 +15,7 @@ class ChapterItemList extends Component {
     constructor(props) {
         super(props);
         this.state={
+            courseChapter:[],
             currentChapterNo:1,
             courseChapterList:[],
             activeCorseForChapter:{
@@ -22,10 +23,40 @@ class ChapterItemList extends Component {
                 lessonInfo:null
             }
         }
+        this.hasSaveFlag=false;
+    }
+
+    componentDidMount(){
+        let courseId=this.props.courseId;
+        if(courseId!=""){
+            this.getCourseAllClass(courseId)
+        }
+    }
+    getCourseAllClass(id){
+        let _self=this;
+        CourseServer.getCourseAllClassByAjax(id,function(code,data){
+            let newData=_self.farmatCourseInfo(data);
+            _self.setState({
+                courseChapterList: newData
+            })
+        })
     }
 
 
+    farmatCourseInfo(data){
+        let courseChapter=this.props.chapterList;
+        let newData=[];
+        if(data.length>0)
+        {
+            data.map(function(item,index){
+                let newItem=Object.assign(item,courseChapter[index]);
+                newData.push(newItem);
+            })
+        }
 
+        return newData;
+
+    }
     addCourseChapterTitle(){
         let _self=this
         let currentChapterNo=_self.state.currentChapterNo;
@@ -59,25 +90,61 @@ class ChapterItemList extends Component {
     }
     //章节发布
     submitCourseChapter(chapterInfo,index){
+        let _self=this;
         let courseChapterList=this.state.courseChapterList;
         courseChapterList[index]=chapterInfo;
+
         this.setState({
             courseChapterList:courseChapterList
+        },function(){
+            _self.props.submitCallBack(courseChapterList);
         })
         //这里需要回调保存信息
-        this.props.submitCallBack(courseChapterList);
-        //console.log(courseChapterList);
+
     }
         orderPublish(courseChapterList){
-            this.props.orderPublish(courseChapterList);
+            let checkResult=this.checkCourseChapter(courseChapterList);
+            if(checkResult)
+            {
+                if(this.hasSaveFlag)
+                {
+                    this.props.orderPublish(courseChapterList);
+                }else{
+                    if(confirm("你修改的数据还没有保存，确定要发布吗?"))
+                    {
+                        this.props.orderPublish(courseChapterList);
+                    }
+                }
+
+            }else{
+                alert("你还没有填加课时信息，只存暂存于草稿箱");
+            }
         }
+
     //通知父组件刷新提交章节信息
     submitChapterInfo(){
+            this.hasSaveFlag=true;
         let courseChapterList=this.state.courseChapterList;
         this.props.submitCallBack(courseChapterList);
-        console.log(courseChapterList);
     }
 
+    checkCourseChapter(list){
+        let hasCourseTime=false;
+        list=list||this.state.courseChapterList;
+        if(list.length>0)
+        {
+
+            for(var i=0;i<list.length; i++){
+                let courseList=list[i].courseList;
+                if(courseList.length>0){
+                    hasCourseTime=true;
+                    break;
+                }
+            }
+        }
+        return hasCourseTime;
+
+    }
 
     showModal(index){
         let activeCorseForChapter=this.state.activeCorseForChapter;
@@ -124,6 +191,7 @@ class ChapterItemList extends Component {
         };
 
         let courseChapterList=this.state.courseChapterList;
+
         let _self=this;
 
         return (
@@ -133,6 +201,7 @@ class ChapterItemList extends Component {
                         (courseChapterList.length>0)
                         ?
                             courseChapterList.map(function(item,index){
+
                                 return <ChapterItem
                                             key={index}
                                             formItemLayout={formItemLayout}

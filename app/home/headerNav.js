@@ -29,11 +29,11 @@ const basePath=Commom.getRootPath();
                 </Popover>
             );
             if(loginFlag){
-                loginViewModal=<Col sm={1}>
+                loginViewModal=
                     <OverlayTrigger trigger="click" placement="bottom" overlay={popoverBottom}>
                         <a href="javascript:void(0);"><Image  src= {basePath+"images/symbol/aze.png"} width={40} circle /></a>
                     </OverlayTrigger>
-                </Col>
+
             }else{
                 loginViewModal= <a href="javascript:void(0);"><Image className='gray' onClick={()=>this.props.loginModalControl()} src={basePath+"images/symbol/aze.png"} width={40} circle /></a>
             }
@@ -43,12 +43,12 @@ const basePath=Commom.getRootPath();
                     <Row >
                         <Col sm={3}>
                             <div className="logo">
-                                <a href="index.html"><img src={basePath+"images/logo.png"} title="logo" /></a>
+                                <a href={basePath+"index.html"}><img src={basePath+"images/logo.png"} title="logo" /></a>
                             </div>
                         </Col>
                         <Col sm={3}> <SearchBox/></Col>
                         <Col sm={5}>
-                            <HeaderMenu menuList={HomeNavData} />
+                            <HeaderMenu  menuList={HomeNavData}  loginModalControl={()=>this.props.loginModalControl()}/>
                         </Col>
                         <Col>
                             {loginViewModal}

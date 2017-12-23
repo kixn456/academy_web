@@ -46,7 +46,7 @@ export const CourseInfoData={
                     originalPrice: '15.00',
                     realPrice: '12.00',
                     videoUrl: 'http://www.163.com',
-                    vodeoId: '视频ID'
+                    videoId: '视频ID'
                 },
                 {
                     classId: '1001',
@@ -56,7 +56,7 @@ export const CourseInfoData={
                     originalPrice: '发布的原始价格',
                     realPrice: '12.00',
                     videoUrl: 'http://www.163.com',
-                    vodeoId: '视频ID'
+                    videoId: '视频ID'
                 },
                 {
                     classId: '1001',
@@ -66,7 +66,7 @@ export const CourseInfoData={
                     originalPrice: '发布的原始价格',
                     realPrice: '12.00',
                     videoUrl: 'http://www.163.com',
-                    vodeoId: '视频ID'
+                    videoId: '视频ID'
                 },
                 {
                     classId: '1001',
@@ -76,7 +76,7 @@ export const CourseInfoData={
                     originalPrice: '发布的原始价格',
                     realPrice: '12.00',
                     videoUrl: 'http://www.163.com',
-                    vodeoId: '视频ID'
+                    videoId: '视频ID'
                 },
                 {
                     classId: '1001',
@@ -86,7 +86,7 @@ export const CourseInfoData={
                     originalPrice: '发布的原始价格',
                     realPrice: '12.00',
                     videoUrl: 'http://www.163.com',
-                    vodeoId: '视频ID'
+                    videoId: '视频ID'
                 }]
         },{
             chapterId: '100000',
@@ -101,7 +101,7 @@ export const CourseInfoData={
                     originalPrice: '15.00',
                     realPrice: '12.00',
                     videoUrl: 'http://www.163.com',
-                    vodeoId: '视频ID'
+                    videoId: '视频ID'
                 },
                 {
                     classId: '1001',
@@ -111,7 +111,7 @@ export const CourseInfoData={
                     originalPrice: '发布的原始价格',
                     realPrice: '12.00',
                     videoUrl: '',
-                    vodeoId: '视频ID'
+                    videoId: '视频ID'
                 },
                 {
                     classId: '1001',
@@ -121,7 +121,7 @@ export const CourseInfoData={
                     originalPrice: '发布的原始价格',
                     realPrice: '12.00',
                     videoUrl: '',
-                    vodeoId: '视频ID'
+                    videoId: '视频ID'
                 },
                 {
                     classId: '1001',
@@ -131,7 +131,7 @@ export const CourseInfoData={
                     originalPrice: '发布的原始价格',
                     realPrice: '12.00',
                     videoUrl: '',
-                    vodeoId: '视频ID'
+                    videoId: '视频ID'
                 },
                 {
                     classId: '1001',
@@ -141,7 +141,7 @@ export const CourseInfoData={
                     originalPrice: '发布的原始价格',
                     realPrice: '12.00',
                     videoUrl: '',
-                    vodeoId: '视频ID'
+                    videoId: '视频ID'
                 }]
         },
             {
@@ -157,7 +157,7 @@ export const CourseInfoData={
                         originalPrice: '15.00',
                         realPrice: '12.00',
                         videoUrl: '',
-                        vodeoId: '视频ID'
+                        videoId: '视频ID'
                     },
                     {
                         classId: '1001',
@@ -167,7 +167,7 @@ export const CourseInfoData={
                         originalPrice: '发布的原始价格',
                         realPrice: '12.00',
                         videoUrl: '',
-                        vodeoId: '视频ID'
+                        videoId: '视频ID'
                     },
                     {
                         classId: '1001',
@@ -177,7 +177,7 @@ export const CourseInfoData={
                         originalPrice: '发布的原始价格',
                         realPrice: '12.00',
                         videoUrl: '',
-                        vodeoId: '视频ID'
+                        videoId: '视频ID'
                     },
                     {
                         classId: '1001',
@@ -187,7 +187,7 @@ export const CourseInfoData={
                         originalPrice: '发布的原始价格',
                         realPrice: '12.00',
                         videoUrl: '',
-                        vodeoId: '视频ID'
+                        videoId: '视频ID'
                     },
                     {
                         classId: '1001',
@@ -197,7 +197,7 @@ export const CourseInfoData={
                         originalPrice: '发布的原始价格',
                         realPrice: '12.00',
                         videoUrl: '',
-                        vodeoId: '视频ID'
+                        videoId: '视频ID'
                     }]
             }]
     }

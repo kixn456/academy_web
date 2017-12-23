@@ -7,7 +7,7 @@ import  ReactDOM from 'react-dom';
 import {Grid,ROW,Col} from "react-bootstrap";
 import HomeMain from '../home/index';
 import CourseDescription from './detail/index'
-
+import Footer from '../inc/foot/footer';
 
  class CourseDetail extends Component{
      constructor(props) {
@@ -29,6 +29,7 @@ import CourseDescription from './detail/index'
             <div>
                 <HomeMain loginShow={this.state.loginShow} />
                 <CourseDescription onLoginCallBack={()=>this.onLogin()}/>
+                <Footer/>
            </div>
 
         )

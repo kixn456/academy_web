@@ -18,12 +18,17 @@ export default class ChapterInfo extends Component {
                 chapterIndex:this.props.chapterIndex,
                 submitFlag:false,
                 isModify:false
-
             }
     }
 
     componentDidMount(){
-        //console.log(this.props.chapterInfo);
+        if(this.props.chapterInfo.chapterId)
+        {
+            this.setState({
+                submitFlag:true,
+                isModify:true
+            })
+        }
     }
 
     addChapte(){
@@ -33,8 +38,7 @@ export default class ChapterInfo extends Component {
         this.setState({
             submitFlag:true
         })
-        /*console.log("章节信息");
-        console.log(chapterInfo);*/
+
         this.props.submitCallFn(chapterInfo);
     }
     changeHandle(e){
@@ -45,7 +49,7 @@ export default class ChapterInfo extends Component {
         chapterInfo[name]=value;
         this.setState({
             chapterInfo:chapterInfo
-        })
+        },()=>console.log(this.state.chapterInfo.chapterTitle));
     }
 
     modifyChapter(){
@@ -81,14 +85,14 @@ export default class ChapterInfo extends Component {
         return (
             <div>
                 <div className="timeline-group">
-                            <div className="timeline-title line-32">第{chapterIndex+1}章</div>
+                            <div className="timeline-title line-32" style={{fontWeight:'bold'}}>第{chapterIndex+1}章</div>
                             <div className="timeline-group solid-circle">
                                 <div className="timeline-content">
                                     {
                                         (submitFlag)
                                             ?
                                             <div>
-                                                <Col span={16}>{chapterInfo.chapterTitle}</Col>
+                                                <Col span={16} style={{fontWeight:'bold'}}>{chapterInfo.chapterTitle}</Col>
                                                 <Col span={8} className="text-right">
                                                     <Button onClick={this.modifyChapter.bind(this)}  style={{marginRight:'10px'}}>编辑</Button>
                                                     <Button onClick={this.modifyChapter.bind(this)} >删除</Button>

@@ -20,11 +20,16 @@ import QuestionList from './question/index';
 import QuestionDetail from './question/QuestionDetail';
 import EvaluateList from './evaluate/index';
 import TaskList from './task/index';
+import Footer from "../inc/foot/footer";
+import ModifyCourse from './course/addLesson';
 export default class MainFrame extends Component{
     render(){
         return (
-            <div style={{background:'#eee'}}>
-                <UserHeader/>
+            <div>
+                <div className="headerTop">
+                    <UserHeader/>
+                </div>
+
                 <div style={{background:'#eee',paddingTop:'20px',marginTop:'70px'}}>
                     <Grid>
                         <div className='leftMenu'>
@@ -33,26 +38,24 @@ export default class MainFrame extends Component{
                                       menuItemClickFn={(routerName)=>this.menuItemClickFn(routerName)}/>
                         </div>
                         <div className='content_main'>
-                            <Col style={{background:'white',minHeight:'400px',marginLeft:'14px'}}>
+                            <Col md={12}>
                                 {this.props.children}
                             </Col>
                         </div>
                     </Grid>
                 </div>
+                <Footer/>
             </div>
-
-
         )
     }
 }
 
-
 ReactDOM.render(
     <Router history={hashHistory}>
         <Route path="/" component={MainFrame}>
-            <IndexRoute component={AddLesson}/>
+            <IndexRoute component={CourseMananger}/>
             <Route path="TeachCenter" component={AddLesson}/>
-            <Route path="ModifyTeach(/:id)" component={AddLesson}/>
+            <Route path="ModifyTeach(/:id)" component={ModifyCourse}/>
             <Route path="CourseMananger" component={CourseMananger}/>
             <Route path="myQuestion" component={QuestionList}/>
             <Route path="QuestionDetail" component={QuestionDetail}/>

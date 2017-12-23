@@ -16,15 +16,39 @@ import {CourseListData} from '../testData/courseListData';
  *  chapterId
  * */
 export function getCourseDetailByAjax(courseId,successCallBack,errorCallBack){
-    let serverUrl="";
-    ajaxPost(serverUrl,courseId,function(data){
-        successCallback(data.retCode,data.responseInfo);
+    let serverUrl=getRootPath()+"studentCourse/"+courseId+"/queryCourse";
+    ajaxGet(serverUrl,{},function(data){
+        successCallBack(data.retCode,data.responseInfo);
     },function(e){
         console.log("errorInfo:"+e);
         //errorCallback(e);
     })
-    successCallBack(CourseInfoData);
+   // successCallBack(0,CourseInfoData.responseInfo);
 }
+
+export function getCourseAllClassByAjax(courseId,successCallBack,errorCallBack){
+    let serverUrl=getRootPath()+"studentCourse/"+courseId+"/queryAllClass";
+    ajaxGet(serverUrl,{},function(data){
+        successCallBack(data.retCode,data.responseInfo);
+    },function(e){
+        console.log("errorInfo:"+e);
+        //errorCallback(e);
+    })
+    //successCallBack(CourseInfoData);
+}
+/*****查询课程详细并带是否购买某些课时******/
+
+export function getCourseDetailForUserByAjax(userId="000000",courseId,successCallBack,errorCallBack){
+    let serverUrl=getRootPath()+"studentCourse/"+courseId+"/queryMyCourse";
+    let ajaxData={userId:userId};
+    ajaxPost(serverUrl,ajaxData,function(data){
+        successCallBack(data.retCode,data.responseInfo);
+    },function(e){
+        console.log("errorInfo:"+e);
+        //errorCallback(e);
+    })
+}
+
 
 /**
  * 搜索课程
@@ -39,20 +63,17 @@ export function getCourseDetailByAjax(courseId,successCallBack,errorCallBack){
  *  }
 
  * */
-
-
 export function getCourseListBySearch(searchInfo,successCallBack,errorCallBack){
 
-    searchInfo={
-        keyword:'JAVA',
-        category:'2',
-        pageNo:'1',
+    /*searchInfo={
+        /!* keyword:'JAVA',
+         category:'2',*!/
+        pageNum:'1',
         pageSize:'10',
-        fitPeople:'本科',
-        difficultyLevel:'2',
-        priceRange:'20-50',
-    };
-
+        /!* fitPeople:'本科',
+         difficultyLevel:'2',
+         priceRange:'20-50',*!/
+    };*/
 
     if(searchInfo.keyword)
     {
@@ -62,13 +83,12 @@ export function getCourseListBySearch(searchInfo,successCallBack,errorCallBack){
         //分类搜
     }
 
-    let serverUrl="";
+    let serverUrl=getRootPath()+"vodManagerDb/getAllCourse/";
     ajaxPost(serverUrl,searchInfo,function(data){
-        successCallback(data.retCode,data.responseInfo);
+        successCallBack(data.retCode,data.responseInfo);
     },function(e){
         console.log("errorInfo:"+e);
         //errorCallback(e);
     })
-    console.log(CourseListData);
-    successCallBack(CourseListData);
+
 }

@@ -12,12 +12,15 @@ export default class RegisterForm extends Component {
         super(props);
         let defaultState=this.initDefaultState();
         this.state = {
-            registerData:defaultState,
+            registerData:Object.assign({},defaultState),
             registerSession:null,
             errorMsg:'',
-            authCodeDisable:false,//验证码按钮可用装态
-            submitDisable:true//提交铵钮使用状态
+            authCodeDisable:true,//验证码按钮可用装态
+            submitDisable:true,//提交铵钮使用状态
+            authBtnText:'验证码'
         }
+        this.times=30;
+        this.timer=null;
     }
 
     //初始化state
@@ -43,27 +46,50 @@ export default class RegisterForm extends Component {
     //点击输入框并整理modal
     handleChange(name)
     {
-
+        let errorMsg="";
         let registerData=this.state.registerData;
         registerData[name]=this[name].value;
-        //console.log(registerData[name]+"==="+name);
-        this.setState({registerData:registerData});
+        let checkFlag=this.checkPhone(registerData.phone);
+        if(!checkFlag){
+            //如果输入的不是电话号码
+            errorMsg=ErrorMSG['1003'];
+        }else{
+            this.setAuthCodeBtnUi();
+        }
+        this.setState({
+            errorMsg
+        })
+
     }
 
 
     //更新验证码按钮UI点击状态
     setAuthCodeBtnUi(){
+        let registerData=this.state.registerData;
+        let submitDisable=(registerData.phone==""||registerData.authCode==""|| registerData.password=="")?true:false;
+        let authCodeDisable=(registerData.phone=="")?true:false;
         this.setState({
-            authCodeDisable:true,
-            submitDisable:false
-        })
+            authCodeDisable,
+            submitDisable
+        });
     }
+
+     checkPhone(phone){
+
+        if(!(/^1[34578]\d{9}$/.test(phone))){
+
+            return false;
+        }else{
+            return true;
+        }
+    }
+
     //点击发送验证码
     getAuthCode()
     {
         let _self=this;
         let registerData=_self.state.registerData;
-        _self.setAuthCodeBtnUi();
+        this.setAuthCodeBtnUi();
         LoginServer.ajaxGetAuthCode(registerData.countryCode,registerData.countryCode+registerData.phone,function success(result,authCode)
             {
                 if(result==0)
@@ -75,11 +101,10 @@ export default class RegisterForm extends Component {
                         random:authCode.random,
                         crcType:authCode.crcType
                      };
+                _self.setTimeAuthBtn();
                     //写入state更新STATE状态
                     _self.setState({
-                        registerSession:registerSession,
-                        authCodeDisable:false,
-                        submitDisable:false
+                        registerSession:registerSession
                     })
                 }
             },
@@ -87,6 +112,29 @@ export default class RegisterForm extends Component {
 
             });
     }
+
+setTimeAuthBtn(){
+         let _self=this;
+    _self.timer = setInterval(function(){
+        if(_self.times<=0){
+            _self.times=30;
+            let authBtnText="验证码";
+            _self.setState({
+                authBtnText:authBtnText,
+                authCodeDisable:false
+            })
+            clearInterval(_self.timer);
+        }else{
+            let authBtnText=_self.times+"s重发";
+            _self.setState({
+                authBtnText:authBtnText,
+                authCodeDisable:true
+            })
+            _self.times--;
+        }
+
+    },1000)
+}
 
     //注册按钮提交事件
     registerSubmit(){
@@ -108,15 +156,21 @@ export default class RegisterForm extends Component {
                _self.props.callHandle({registerSuccss:true});
             }else{
                 //更新state中错误信息内容
+                alert(ErrorMSG[result]);
                 _self.setState({
                     errorMsg:ErrorMSG[result]
                 })
-               // alert(ErrorMSG[result]);
             }
         });
 
     }
     render(){
+
+
+
+
+
+
         return (
             <Form horizontal>
 
@@ -127,7 +181,7 @@ export default class RegisterForm extends Component {
                     <Col componentClass={ControlLabel} sm={4}>
                         Country Code：
                     </Col>*/}
-                    <Col smOffset={2} sm={8}>
+                    <Col smOffset={2} sm={8} style={{display:'none'}}>
                         <InputGroup>
                                 <DropdownButton
                                     componentClass={InputGroup.Button}
@@ -178,7 +232,7 @@ export default class RegisterForm extends Component {
 
                             <FormControl type="text" name="authcode"  placeholder="验证码" data-tip="请输入短信认证码" inputRef={(ref) => {this.authCode = ref}}  onChange={()=>this.handleChange('authCode')} />
                             <InputGroup.Button>
-                                <Button  bsStyle="success" onClick={this.getAuthCode.bind(this)} disabled={this.state.authCodeDisable}>验证码</Button>
+                                <Button  bsStyle="success" onClick={this.getAuthCode.bind(this)} disabled={this.state.authCodeDisable}>{this.state.authBtnText}</Button>
                             </InputGroup.Button>
                         </InputGroup>
 
@@ -187,7 +241,7 @@ export default class RegisterForm extends Component {
 
                 </FormGroup>
                 <FormGroup>
-                    <Col smOffset={2} sm={8}>
+                    <Col smOffset={2} sm={8} style={{color:'red',fontSize:'12px'}}>
                         {this.state.errorMsg}
                     </Col>
                 </FormGroup>

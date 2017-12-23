@@ -7,7 +7,8 @@
 import React,{ Component } from 'react';
 import QueueAnim from 'rc-queue-anim';
 import {Grid,ROW,Col} from "react-bootstrap";
-
+import * as Commom from '../../public/commom/commom';
+const basePath=Commom.getRootPath();
 export default class ClassItem extends Component {
     constructor(props) {
         super(props);
@@ -16,8 +17,9 @@ export default class ClassItem extends Component {
             dataSource:this.props.dataSource
         }
     }
-
-
+    gotoPage(item){
+        location.href=basePath+"courseList.html?keyword="+item.name+"&id"+item.id;
+    }
     controllerMenu(index){
         let dataSource=this.state.dataSource;
         let activeList=dataSource[index].child;
@@ -37,19 +39,22 @@ export default class ClassItem extends Component {
         let _self=this;
         let dataSource=this.state.dataSource;
         let childList=this.state.activeList;
+
         return(
             <div onMouseLeave={()=>this.closeMenu()}>
                 {
                     (childList.length>0)
                     ?
-                        <div style={{background:'rgba(255,255,255,.5)',height:'360px',width:'820px',position:'absolute',top:'0',left:'160px'}}>
+                        <div className="maskChild">
+                            <ul>
                             {
                                 childList.map(function(item,index){
-                                    return <li className="menuLi" key={index} >
-                                        <a href="#" >{item.name}</a>
+                                    return <li className="menuChildLi" key={index} >
+                                        <a href="#" onClick={()=>_self.gotoPage(item)} >{item.name}</a>
                                     </li>
                                 })
                             }
+                            </ul>
                         </div>
                         :
                       null

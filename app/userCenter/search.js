@@ -1,5 +1,7 @@
 import React,{ Component } from 'react';
 import {FormGroup,InputGroup,FormControl,Button} from "react-bootstrap";
+import * as Commom from '../public/commom/commom';
+const basePath=Commom.getRootPath();
 
 export default class SearchBox extends Component {
     constructor(props) {
@@ -17,7 +19,7 @@ export default class SearchBox extends Component {
     }
     searchSubmit(){
         let keyword=this.state.keyword;
-       location.href="courseList.html?keyword="+keyword;
+       location.href=basePath+"courseList.html?keyword="+keyword;
     }
     render(){
         return(

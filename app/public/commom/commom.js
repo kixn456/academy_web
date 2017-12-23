@@ -5,7 +5,6 @@
  *@out
  */
 
-
 export function isEmptyObject(e) {
     var t;
     for (t in e)
@@ -27,7 +26,7 @@ export function GetRequest(params) {
     if(params){
         url=params;
     }
-    console.log(url);
+
     var theRequest = new Object();
     if (url.indexOf("?") != -1) {
         let  str = url.substr(1);
@@ -64,6 +63,37 @@ export function clone(obj){
 
 }
 
+export function formatServerPhoto(imgPath){
+    let imgObj={
+        originalPhoto: "",
+        largePhoto: "",
+        middlePhoto: "",
+        smallPhoto: ""
+    };
+    if(imgPath){
+        if(imgPath.indexOf("http://")>=0){
+            let pinterIndex=imgPath.lastIndexOf(".");
+            let beforeName=imgPath.substring(0,pinterIndex);
+            let lastName=imgPath.substring(pinterIndex);
+            imgObj= {
+                originalPhoto:imgPath,
+                largePhoto:beforeName+"_large"+lastName,
+                middlePhoto:beforeName+"_middle"+lastName,
+                smallPhoto:beforeName+"small"+lastName
+            };
+        }else{
+            imgObj={
+                originalPhoto: imgPath,
+                largePhoto: imgPath,
+                middlePhoto: imgPath,
+                smallPhoto: imgPath
+            }
+        }
+
+    }
+    return imgObj;
+}
+
 export function getRootPath()
 {
     let curWwwPath = window.document.location.href;
@@ -74,6 +104,6 @@ export function getRootPath()
     let localhostPaht = curWwwPath.substring(0, pos);
     //获取带"/"的项目名，如：/uimcardprj
     let projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
-   return localhostPaht+projectName+"/";
-
+    //return localhostPaht+projectName+"/";
+    return localhostPaht+"/";
 }

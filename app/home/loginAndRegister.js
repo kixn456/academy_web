@@ -108,7 +108,7 @@ export default class ClassItem extends Component {
         }
         return(
 
-            <div className="static-modal">
+            <div>
                 <Modal
                     show={this.props.show}
                     onHide={this.hideModal.bind(this)}

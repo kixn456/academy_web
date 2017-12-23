@@ -73,14 +73,13 @@ export function ajaxReqPlayVideo(vodPlayInfo,successCallback,serverUrl=null)
     let data =vodPlayInfo;
 
     ajaxPost(serverUrl,data,function successLogin(data,textStatus){
-            console.log(data);
+
             if(data.retCode==0)
             {
-                let playAuth = data.responseInfo;
-                successCallback(data.retCode,playAuth);
 
+                successCallback(data.retCode,data.responseInfo);
             }
-            successCallback(data.retCode,null);
+
         },
         function errorLogin(xhr,testStatus){
             successCallback(-1,null);

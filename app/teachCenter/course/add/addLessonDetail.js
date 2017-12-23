@@ -3,37 +3,22 @@
  */
 
 import React, {Component} from 'react';
-import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox,Button,Radio,Upload, message } from 'antd';
+import { Form, Input, Col,Button} from 'antd';
 
 
 import * as I18N from '../../../i18n/i18n_teachCenter';
-
 import {CoustomInput} from '../../../public/newInput';
+
+//import MyEditor from '../../../myEdit/index';
+//import MyEditor from '../../../myEdit/index';
+
+
+import ReactQuill from 'react-quill'; // ES6
+import 'react-quill/dist/quill.snow.css'; // ES6
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
-const Dragger = Upload.Dragger;
 
-const props = {
-    name: 'file',
-    multiple: true,
-    showUploadList: false,
-    action: '//files.chunzeacademy.com:9200/images/uploadThumbImage'
-   /* onChange(info) {
-        console.log("---------------");
-        console.log(info);
-        const status = info.file.status;
-        if (status !== 'uploading') {
-            console.log(info.file, info.fileList);
-        }
-        if (status === 'done') {
-            message.success(`${info.file.name} file uploaded successfully.`);
-
-        } else if (status === 'error') {
-            message.error(`${info.file.name} file upload failed.`);
-        }
-    }*/
-};
 
 class AddLessonDetail extends Component {
     constructor(props) {
@@ -45,6 +30,8 @@ class AddLessonDetail extends Component {
             errorInfo:JSON.parse(defaultState),
             errorClass:JSON.parse(defaultState)
         }
+
+
     }
 
     initState(){
@@ -53,54 +40,57 @@ class AddLessonDetail extends Component {
             detail:'',
             searchKeys:'',//标签
             fitPeople:'',//适用人群
-            courseAvatar:'',//课程封面
             difficultyLevel:''//难度级别
         };
         return defaultState;
     }
 
-    componentDidMount(){
+    componentDidMount() {
 
-        let courseInfo=this.props.dataSource;
-        if(courseInfo){
-          this.setState({
-              courseInfo:courseInfo
-          })
+        let courseInfo = this.props.dataSource;
+        if (courseInfo) {
+            this.setState({
+                courseInfo: courseInfo
+            })
         }
+
+        /*this.smde = new SimpleMDE({
+            element: document.getElementById('editor'),
+            autofocus: true,
+            autosave: true,
+            status: false,
+            previewRender: function (plainText) {
+                return marked(plainText, {
+                    renderer: new marked.Renderer(),
+                    gfm: true,
+                    pedantic: false,
+                    sanitize: false,
+                    tables: true,
+                    breaks: true,
+                    smartLists: true,
+                    smartypants: true,
+                    highlight: function (code) {
+                        return highlight.highlightAuto(code).value;
+                    }
+                });
+            },
+        })
+        this.smde.value(courseInfo.detail);
+        console.log(courseInfo.detail);*/
 
     }
-    uploadOnChange(info){
-
-        const status = info.file.status;
-        if (status !== 'uploading') {
-
-        }
-        if (status === 'done') {
-
-            let result=info.file.response;
-
-            if(result.retCode==0){
-                let courseInfo=this.state.courseInfo;
-                    courseInfo.courseAvatar=result.responseInfo;
-                this.setState({
-                    courseInfo:courseInfo
-                })
-                message.success(`${info.file.name} file uploaded successfully.`);
-            }
-
-
-           /* message.success(`${info.file.name} file uploaded successfully.`);*/
-
-        } else if (status === 'error') {
-
-            message.error(`${info.file.name} file upload failed.`);
-        }
+    handleChangeEdit(html){
+        let courseInfo=this.state.courseInfo;
+        courseInfo.detail=html;
+        this.setState({
+            courseInfo:courseInfo
+        })
     }
-
     changeHandle(e){
         let courseInfo=this.state.courseInfo;
         let name=e.target.name;
         let value=e.target.value;
+
         let checkInfoObject=this.checkUserInputValue(name,value,courseInfo);
         this.setCourseInfo(checkInfoObject);
     }
@@ -119,7 +109,7 @@ class AddLessonDetail extends Component {
             case 'detail':
                  checkFlag=_self.checkCourseInto(value);
                  if(checkFlag){
-                     errorInfo[name]="课程描述只能输入15－100个字符";
+                     errorInfo[name]="课程描述只能输入5－1000个字符";
                      errorClass[name]="error";
                  }else{
                      errorClass[name]="success";
@@ -130,9 +120,7 @@ class AddLessonDetail extends Component {
                 break;
             case 'fitPeople':
                 break;
-            case 'courseAvatar':
-                
-                break;
+
             case 'difficultyLevel':
                 break;
         }
@@ -158,8 +146,8 @@ class AddLessonDetail extends Component {
     }
     checkCourseInto(str){
         //15-100个字符
-        let checkRegMath=/^[A-Za-z0-9_\-\u4e00-\u9fa5]{5,10000}$/;
-        if(!checkRegMath.test(str)){
+        let checkRegMath=/^[A-Za-z0-9_\-\u4e00-\u9fa5]{5,1000}$/;
+        if(str.length>1000 || str.length<5){
             return true
         }else{
             return false;
@@ -168,6 +156,17 @@ class AddLessonDetail extends Component {
 
     addCourseStepSubmit(){
         let courseInfo=this.state.courseInfo;
+        //courseInfo.detail=
+
+    /*    var testPlain = this.smde.value();
+        var testMarkdown =  this.smde.markdown(testPlain);
+        courseInfo.detail=testMarkdown;
+        this.setState({
+            courseInfo:courseInfo
+        })*/
+
+       /* console.log(courseInfo.detail);
+        return;*/
         let errorClass=this.state.errorClass;
         let checkErrorArray=this.submitBeforCheck(courseInfo);
         if(checkErrorArray.length>0){
@@ -182,6 +181,7 @@ class AddLessonDetail extends Component {
             })
             return;
         }else{
+
             this.props.submitCallBack(courseInfo);
         }
     }
@@ -217,7 +217,7 @@ class AddLessonDetail extends Component {
         return (
             <Form  style={{marginTop:20}}>
 
-                <FormItem
+               {/* <FormItem
                     {...formItemLayout}
                     label={I18N.I18N_TEATCH_CENTER.CLASS_courseAvatar}
                 >
@@ -226,41 +226,18 @@ class AddLessonDetail extends Component {
                     <Upload
                         className="avatar-uploader"
                         name="avatar"
-
                         {...props}
                         onChange={(info)=>this.uploadOnChange(info)}
                     >
                         {
                             (courseInfo.courseAvatar!="")
                                 ?
-                                <img src={courseInfo.courseAvatar} style={{width:"200px",height:'auto'}} />
+                                <img src={courseInfo.courseAvatar} style={{width:"200px",height:'auto',maxHeight:'140px'}} />
                                 :
                                 <Icon type="plus" className="avatar-uploader-trigger" />
                         }
-
                     </Upload>
-
-                   {/* <Dragger {...props}  onChange={(info)=>this.uploadOnChange(info)}>
-
-
-
-                            <p className="ant-upload-drag-icon">
-                                {
-
-                                 (courseInfo.courseAvatar!="")
-                                ?
-                                        <img src={courseInfo.courseAvatar} style={{width:"200px",height:'auto'}} />
-                                :
-                                <Icon type="inbox" />
-                                }
-                            </p>
-
-
-
-                        <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                        <p className="ant-upload-hint">Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files</p>
-                    </Dragger>*/}
-                </FormItem>
+                </FormItem>*/}
 
 
                 <CoustomInput
@@ -289,6 +266,7 @@ class AddLessonDetail extends Component {
                 />
 
                 <CoustomInput
+
                     formItemLayout={formItemLayout}
                     name='fitPeople'
                     label={I18N.I18N_TEATCH_CENTER.CLASS_fitPeople}
@@ -301,9 +279,16 @@ class AddLessonDetail extends Component {
                     defaultValue={courseInfo.fitPeople}
                 />
 
+                <Col span={14} offset={6} style={{minHeight:'300px'}}>
+                    <ReactQuill value={courseInfo.detail}
+                              onChange={this.handleChangeEdit.bind(this)}
+                    />
+                </Col>
+{/*
                 <CoustomInput
                     formItemLayout={formItemLayout}
                     name='detail'
+                    id="editor"
                     label={I18N.I18N_TEATCH_CENTER.CLASS_detail}
                     validateStatus={errorClass.detail}
                     defaultValue={courseInfo.detail}
@@ -312,8 +297,7 @@ class AddLessonDetail extends Component {
                     require={true}
                     placeholder={I18N.I18N_TEATCH_CENTER.CLASS_detail_tip}
                     errorMsg={I18N.I18N_TEATCH_CENTER.CLASS_detail_tip}
-                />
-
+                />*/}
 
 
                 <Col span={24} className='formItem_bottom' offset={6}>

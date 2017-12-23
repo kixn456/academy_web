@@ -19,7 +19,7 @@ import {isEmptyObject} from "../../../public/commom/commom";
 import * as VideoServer from '../../../server/videoPlayerServer';
 
 
-
+const Option = Select.Option;
 function log(value) {
    console.log(value);
 }
@@ -37,12 +37,14 @@ export default class addCourse extends Component
         defaultState=JSON.stringify(defaultState);
 
         this.state={
+            submitFlag:true,
             isModify:false,
             courseIndex:"",
             lessonInfo:JSON.parse(defaultState),
             errorClass:JSON.parse(defaultState),
             errorInfo:JSON.parse(defaultState),
-            percent:0
+            percent:0,
+            originalFile:''
         };
         this.uploader=null;
         this.uploadAuthList=[]
@@ -59,8 +61,8 @@ export default class addCourse extends Component
                 classDetail:'',//课时详细
                 originalPrice:'0.0',
                 realPrice:'0.0',
-                videoUrl:'',
-                vodeoId:''
+                vdeoUrl:'',
+                videoId:''
         }
         return defaultState;
     }
@@ -89,7 +91,15 @@ export default class addCourse extends Component
             },
             // 文件上传完成
             'onUploadSucceed': function (uploadInfo) {
-                log("onUploadSucceed: " + uploadInfo.file.name + ", endpoint:" + uploadInfo.endpoint + ", bucket:" + uploadInfo.bucket + ", object:" + uploadInfo.object);
+                let videoUrl=uploadInfo.object;
+                let videoId=_self.uploadAuthList[0].videoId;
+                let lessonInfo=_self.state.lessonInfo;
+                lessonInfo.videoId=videoId;
+                lessonInfo.videoUrl=videoUrl;
+                _self.setState({
+                    lessonInfo:lessonInfo
+                });
+               // log("onUploadSucceed: " + uploadInfo.file.name + ", endpoint:" + uploadInfo.endpoint + ", bucket:" + uploadInfo.bucket + ", object:" + uploadInfo.object);
             },
             // 文件上传进度
             'onUploadProgress': function (uploadInfo, totalSize, uploadedSize) {
@@ -115,9 +125,13 @@ export default class addCourse extends Component
             'onUploadstarted': function (uploadInfo) {
                 var uploadAuth =_self.uploadAuthList[ _self.uploadFileIndex].uploadAuth;
                 var uploadAddress =_self.uploadAuthList[ _self.uploadFileIndex].uploadAddress;
-
                 _self.uploader.setUploadAuthAndAddress(uploadInfo, uploadAuth, uploadAddress);
                _self.uploadFileIndex++;
+               console.log("开始上传");
+               _self.setState({
+                   originalFile:uploadInfo.file.name
+               })
+               //console.log(uploadInfo.file.name);
                 // log("onUploadStarted:" + uploadInfo.file.name + ", endpoint:" + uploadInfo.endpoint + ", bucket:" + uploadInfo.bucket + ", object:" + uploadInfo.object);
             }
         });
@@ -133,6 +147,11 @@ export default class addCourse extends Component
     courseInfoSubmit(){
 
         let lessonInfo=this.state.lessonInfo;
+
+       /* if(lessonInfo.vodeoId=="" && this.oldLessonVodeo.vodeoId!="")
+        {
+            lessonInfo.vodeoId=this.oldLessonVodeo.vodeoId;
+        }*/
         let isModify=this.state.isModify;
         let courseIndex=this.state.courseIndex;
         let errorInfo=this.submitBeforCheckCourseInfo(lessonInfo);
@@ -198,15 +217,19 @@ export default class addCourse extends Component
         let target=e.target;
         let name=target.name;
         let value=target.value;
+        this.exchangeLession({name:name,value:value});
 
+    }
+    selectChange(name,value){
+        this.exchangeLession({name:name,value:value});
+    }
+    exchangeLession(obj){
         let lessonInfo=this.state.lessonInfo;
-        lessonInfo[name]=value;
+        lessonInfo[obj.name]=obj.value;
         this.setState({
             lessonInfo:lessonInfo
         })
-
     }
-
     changeFile(e){
         //获取上传文件列表
         let _self=this;
@@ -214,14 +237,10 @@ export default class addCourse extends Component
         let userData;
         let newUploader=this.state.uploader;
         if(fileName){
-
             userData = '{"Vod":{"UserData":"{"IsShowWaterMark":"false","Priority":"7"}"}}';
             this.uploader.addFile(e.target.files[0], null, null, null, userData);
             _self.startUpload();
         }
-        let message=require( "./addChapterInfo");
-        alert(message);
-
 
     }
 
@@ -267,24 +286,42 @@ export default class addCourse extends Component
         },false)
     }
 
-
+    removeItem(){
+        let lessonInfo=this.state.lessonInfo;
+        this.oldLessonVodeo={
+            videoId:lessonInfo.videoId,
+            videoUrl:lessonInfo.videoUrl
+        };
+        lessonInfo.videoId="";
+        this.setState({
+            lessonInfo:lessonInfo
+        })
+    }
 
     render()
     {
         let courseInfo=this.state.lessonInfo;
         let errorClass=this.state.errorClass;
-
-
+        let percent=this.state.percent;
+        console.log(percent);
+        const props = {
+            name: 'file',
+            headers: {
+                authorization: 'authorization-text',
+            }
+        };
         return (
-
-            <div  span={24}>
+            <Col  span={24}>
                 <Col className='timeline-content-form' span={24}>
                     <Col span={24} className='formItem_bottom'>
                         <Col className="text-right ant-form-item-required" span={4} >
                             课时类型：
                         </Col>
                         <Col span={18}>
-                            <Input name='category' value={courseInfo.category} onChange={this.changeHandle.bind(this)} />
+                            <Select name="category"  size={'large'}   value={courseInfo.category||'0'} style={{width:"100%"}} onSelect={(value)=>this.selectChange('category',value)}>
+                                <Option value="0" >视频</Option>
+                                <Option value="1">文档</Option>
+                            </Select>
                         </Col>
                     </Col>
 
@@ -309,10 +346,19 @@ export default class addCourse extends Component
 
                     <Col span={24} className='formItem_bottom'>
                         <Col className="text-right ant-form-item-required" span={4}>
-                            课时费用：
+                            课时价格：
                         </Col>
-                        <Col span={18}>
+                        <Col span={5}>
                             <Input name='originalPrice' value={courseInfo.originalPrice} onChange={this.changeHandle.bind(this)} />
+                        </Col>
+                    </Col>
+
+                    <Col span={24} className='formItem_bottom'>
+                        <Col className="text-right ant-form-item-required" span={4}>
+                            折扣价格：
+                        </Col>
+                        <Col span={5}>
+                            <Input name='realPrice' value={courseInfo.realPrice} onChange={this.changeHandle.bind(this)} />
                         </Col>
                     </Col>
 
@@ -320,21 +366,44 @@ export default class addCourse extends Component
                         <Col className="text-right" span={4}>
                             上传视频：
                         </Col>
-                        <Col span={18} >
-                             <Input  type="file" onChange={(e)=>this.changeFile(e)} />
-                            <div>
-                                <Progress type="dashboard" percent={this.state.percent}  width={30} showInfo={false} />
+                        <Col span={18}>
+                            <div className="ant-upload ant-upload-select ant-upload-select-text" style={{marginBottom:'2px'}}>
+                                {
+                                    (percent==100 || courseInfo.videoId!="")
+                                        ?
+                                        <span style={{paddingLeft:'10px'}}>{this.state.originalFile}
+                                            <i className="glyphicon glyphicon-facetime-video" aria-hidden="true" ></i>
+                                            <i　style={{paddingLeft:'10px'}}　onClick={()=>this.removeItem()}>删除</i>
+                                        </span>
+                                        :
+                                <span  className="ant-upload" style={{position:'relative'}}>
+                                   <Input  type="file"  onChange={(e)=>this.changeFile(e)} style={{opacity:'0', zIndex:999,position:'absolute',top:'0'}}  />
+                                        <button type="button" className="ant-btn">
+                                            <i className="anticon anticon-upload"></i>
+                                            <span> Click to Upload</span>
+                                        </button>
+                                </span>
+                                }
                             </div>
+                            {
+                             (percent==100 || percent==0)
+                                ?
+                                null
+                                :
+                                 <Progress percent={percent} status="active" />
+                            }
                         </Col>
                     </Col>
                     <Col span={24} className='formItem_bottom'>
-                        <FormItem>
-                            <Button type="primary" onClick={this.courseInfoSubmit.bind(this)}>发布</Button>
-                        </FormItem>
+                        <div style={{textAlign:'center'}}>
+
+                          <Button type="primary" size={'large'} disabled={(percent==100 || percent==0)?false:true} style={{padding:'5px 40px'}}  onClick={this.courseInfoSubmit.bind(this)}>保存</Button>
+
+                        </div>
                     </Col>
                 </Col>
 
-            </div>
+            </Col>
 
 
 

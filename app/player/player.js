@@ -18,110 +18,102 @@ export default class MainFrame extends Component{
     constructor(props){
         super(props);
         this.state={
-            courseInfo:null,
-            player:null,
-            cover:'https://s3m.mediav.com/galileo/03119583cced5bd241dac650e944c6d8.gif',
-            playauth:'',
-            vid:'1e067a2831b641db90d570b6480fbc40',
-            videoUrl:'https://player.alicdn.com/video/aliyunmedia.mp4'
+            courseInfo:null
         }
-
     }
     componentDidMount(){
         let request=Commom.GetRequest();
         let videoInfo=this.state;
-        this.initPlayer(videoInfo);
-        /*this.initData();*/
         this.initCourseList(request.courseId);
+
     }
 
     //初始化播放列表
     initCourseList(courseId){
         let _self=this;
-      CourseServer.getCourseDetailByAjax(courseId,function(data){
-          _self.setState({
-              courseInfo:data.responseInfo
-          })
 
-      },function(e){
-          console.log("请求出错");
-      })
+        CourseServer.getCourseAllClassByAjax(courseId,function(code,data){
+            _self.setState({
+                courseInfo:data
+            })
+
+        },function(e){
+            console.log("error");
+        });
     }
     //初始化播放器
     initPlayer(videoInfo){
+      let videoList=document.querySelectorAll("video");
+
+        if(videoList.length==0)
+        {
+            if(!videoInfo)
+            {
+                videoInfo={
+                    vid:'1e067a2831b641db90d570b6480fbc40',
+                    cover:'https://s3m.mediav.com/galileo/03119583cced5bd241dac650e944c6d8.gif',
+                    playauth:''
+                }
+            }
+            newPlayer = new Aliplayer({
+                id: "c_player",
+                autoplay:true,
+                isLive:false,//是否直播
+                /*playsinline:true,
+                 useH5Prism:false,
+                 useFlashPrism:false,*/
+                width:"100%",
+                height:"600px",
+                vid : videoInfo.vid,//媒体转码服务的媒体Id
+                cover:'https://s3m.mediav.com/galileo/03119583cced5bd241dac650e944c6d8.gif',//入场广告
+                playauth : videoInfo.playauth
+                //source:videoInfo.videoUrl,
+            })
+        }else{
+            newPlayer.replayByVidAndPlayAuth(videoInfo.vid,videoInfo.playauth);
+        }
 
 
-         newPlayer = new Aliplayer({
-            id: "c_player",
-            autoplay:true,
-            isLive:false,
-            playsinline:true,
-            useH5Prism:false,
-            useFlashPrism:false,
-            width:"100%",
-            height:"600px",
-            vid : videoInfo.vid,//媒体转码服务的媒体Id
-            cover:videoInfo.cover,//入场广告
-            playauth : videoInfo.playAuth,
-            source:videoInfo.videoUrl,
-        });
-
-            let _self=this;
-
-        //播放结束时调用
+       /* //播放结束时调用
         newPlayer.on("ended",function(){
-            _self.initData();
 
-        })
-
+            console.log("-------");
+        })*/
 
     }
 
 
-    initData(){
 
-       let player=this.state.player;
-       let vodId = "c430dd8534e04ba8a8acc63931893304";
-       let vodPlayInfo={
-           "videoId":vodId
-       };
-
-       let _self=this;
-        newPlayer.loadByUrl("http://common.qupai.me/player/qupai.mp4");
-
-     };
-
-
-    initPlayVideo() {
-        VideoServer.ajaxReqPlayVideo(vodPlayInfo,function(retCode,playAuth){
+    initPlayVideo(vodPlayInfo) {
+        let _self=this;
+        VideoServer.ajaxReqPlayVideo(vodPlayInfo,function(retCode,data){
             if(retCode==0)
             {
-
-                //reloaduserPlayInfoAndVidRequestMts(videoId,playAuth);
-                    let videoInfo={
-                        vid :playAuth.videoId,//媒体转码服务的媒体Id
-                        playauth:playAuth.playAuth//播放鉴权 [playauth参照](https://help.aliyun.com/document_detail/52833.html?spm=5176.doc51236.6.627.5gm5gf)
-                    }
-                _self.initPlayer(videoInfo);
+              let payInfo={
+                    vid:data.videoId,
+                    playauth:data.playAuth
+                }
+               _self.initPlayer(payInfo);
             }else{
                 alert("get playAuth error");
             }
-
         });
-
     }
 
-    channelExhange(videoId,videoUrl){
-        alert(videoId+"==="+videoUrl);
+    channelExhange(videoId){
+        let vodPlayInfo={
+            "videoId":videoId
+        };
+        this.initPlayVideo(vodPlayInfo);
     }
 
     render(){
         let courseInfo=this.state.courseInfo;
         let _self=this;
         return (
-            <Grid>
-                <Col sm={9}>
-                    <div id='c_player' className='prism-player'></div>
+            <Grid style={{padding:'20px'}}>
+                <Col sm={9} style={{background:'gray',height:'600px'}}>
+                    <div id='c_player' className='prism-player' ></div>
                 </Col>
                 <Col sm={3} style={{background:'black',height:'600px'}}>
 
@@ -129,15 +121,19 @@ export default class MainFrame extends Component{
                         (courseInfo!=null)
                          ?
 
-                            courseInfo.courseChapterList.map(function(item,index){
+                            courseInfo.map(function(item,index){
                                 return (<div style={{color:'white'}} key={index}>
-                                    {item.chapterTitle}
+                                    {item.id}
                                         <ul>
                                             {
                                                 item.courseList.map(function(courseItem,courseIndex){
-                                                    return <li style={{color:'white'}} key={courseIndex} onClick={()=>_self.channelExhange(courseItem.vodeoId,courseItem.videoUrl)}>
-                                                                     {courseItem.classTitle}
-                                                        </li>
+                                                    return (
+                                                        <li style={{color:'white',textAlign:'left',listStyle:'none'}}
+                                                            key={courseIndex}
+                                                            onClick={()=>_self.channelExhange(courseItem.videoId,courseItem.videoUrl)}>
+                                                         {courseItem.classTitle}
+                                                     </li>
+                                                    )
                                                 })
                                             }
                                         </ul>

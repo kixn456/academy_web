@@ -15,9 +15,10 @@ export default class ResetPassword extends Component {
         this.state = {
             loginData: defaultState,
             loginSessionData: {},
-            authCodeDisable:false,
+            authBtnDisable:false,
             submitDisable:true,
-            authBtnText:'验证码'
+            authBtnText:'验证码',
+            errorMsg:''
         }
         this.loginSubmit=this.loginSubmit.bind(this);
     }
@@ -31,7 +32,8 @@ export default class ResetPassword extends Component {
     {
         let defaultState={
             phoneNumer:'',
-            authCode:""
+            authCode:"",
+            authBtnDisable:false
         };
         return defaultState;
     }
@@ -40,8 +42,15 @@ export default class ResetPassword extends Component {
     {
         //这里的stateKey必须与初始state状态管理器中的key保持一持否则无法改值
         let loginData= Object.assign({},this.state.loginData);
+        let submitDisable=true;
         loginData[stateKey]=this[stateKey].value;
-        this.setState({loginData:loginData});
+        if(loginData.loginData!=''){
+            submitDisable=false;
+        }
+        this.setState({
+            loginData:loginData,
+            submitDisable
+        });
     }
     //点击发送验证码
     getAuthCode()
@@ -75,18 +84,20 @@ export default class ResetPassword extends Component {
 
         let countFn=setInterval(function(){
            countTimer++;
-           if(countTimer==5)
+           if(countTimer==30)
            {
                countTimer=0;
                clearInterval(countFn);
                _self.setState({
-                   authBtnText:"验证码"
+                   authBtnText:"验证码",
+                   authBtnDisable:false
                })
 
                _self.submitDisableControl(false);
            }else{
                _self.setState({
-                   authBtnText:(5-countTimer)+"s 后重新发送"
+                   authBtnText:(30-countTimer)+"s 后重新发送",
+                   authBtnDisable:true
                })
            }
        },1000)
@@ -94,7 +105,7 @@ export default class ResetPassword extends Component {
     submitDisableControl(disabled){
 
             this.setState({
-                authCodeDisable:disabled
+                authBtnDisable:disabled
             })
 
     }
@@ -129,11 +140,15 @@ export default class ResetPassword extends Component {
         let loginDessionData=this.state.loginSessionData;
         let authCode=this.state.loginData.authCode;
         loginDessionData.authCode=authCode;
-
+        let _self=this;
         LoginServer.ajaxCheckAuthCode(loginDessionData,function(code,res){
             if(code==0){
                 sucssCallBack();
             }else{
+
+                _self.setState({
+                    errorMsg:ErrorMSG[code]
+                })
                 console.log("smscode is error!")
             }
         },function(e){
@@ -166,7 +181,7 @@ export default class ResetPassword extends Component {
                                     ref='authCodeBtn'
                                     bsStyle="success"
                                     onClick={this.getAuthCode.bind(this)}
-                                    disabled={state.authCodeDisable}>{state.authBtnText}</Button>
+                                    disabled={state.authBtnDisable}>{state.authBtnText}</Button>
                             </InputGroup.Button>
                         </InputGroup>
                     </Col>

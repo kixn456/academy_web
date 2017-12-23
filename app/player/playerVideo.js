@@ -1,0 +1,143 @@
+/**
+ * Created by Administrator on 2017/11/27.
+ */
+
+/**
+ * Created by Administrator on 2017/9/30.
+ *@description
+ *@author
+ *@out
+ */
+
+import React,{Component} from 'react';
+import  ReactDOM from 'react-dom';
+import {Grid,Row,Col} from "react-bootstrap";
+import * as VideoServer from '../server/videoPlayerServer';
+import * as Commom from '../public/commom/commom';
+import * as CourseServer from '../server/courseCenterServer';
+//https://s3m.mediav.com/galileo/03119583cced5bd241dac650e944c6d8.gif
+let  newPlayer=null;
+export default class PlayerCenter extends Component{
+    constructor(props){
+        super(props);
+        this.state={
+            courseInfo:null,
+            player:null,
+            cover:'images/timg2.png',
+            playauth:'',
+            vid:'1e067a2831b641db90d570b6480fbc40',
+            videoUrl:'https://player.alicdn.com/video/aliyunmedia.mp4'
+        }
+
+    }
+    componentDidMount(){
+        let request=Commom.GetRequest();
+        let videoInfo=this.state;
+        if(this.props.dataSource.isVedio)
+        {
+            this.initPlayer(videoInfo);
+        }
+        /*this.initData();*/
+        /*this.initCourseList(request.courseId);*/
+    }
+
+    //初始化播放列表
+    initCourseList(courseId){
+        let _self=this;
+        CourseServer.getCourseDetailByAjax(courseId,function(data){
+            _self.setState({
+                courseInfo:data.responseInfo
+            })
+
+        },function(e){
+            console.log("请求出错");
+        })
+    }
+    //初始化播放器
+    initPlayer(videoInfo){
+
+        let layout=this.props.layout;
+        newPlayer = new Aliplayer({
+            id: "c_player",
+            autoplay:false,
+            isLive:false,
+            playsinline:false,
+            useH5Prism:false,
+            useFlashPrism:false,
+            width:"100%",
+            height:layout.height,
+            vid : videoInfo.vid,//媒体转码服务的媒体Id
+            cover:videoInfo.cover,//入场广告
+            playauth : videoInfo.playAuth,
+            source:videoInfo.videoUrl,
+        });
+
+        let _self=this;
+
+        //播放结束时调用
+        newPlayer.on("ended",function(){
+            _self.initData();
+
+        })
+
+
+    }
+
+
+    initData(){
+
+        let player=this.state.player;
+        let vodId = "c430dd8534e04ba8a8acc63931893304";
+        let vodPlayInfo={
+            "videoId":vodId
+        };
+
+        let _self=this;
+        newPlayer.loadByUrl("http://common.qupai.me/player/qupai.mp4");
+
+    };
+
+
+    initPlayVideo() {
+        VideoServer.ajaxReqPlayVideo(vodPlayInfo,function(retCode,playAuth){
+            if(retCode==0)
+            {
+
+                //reloaduserPlayInfoAndVidRequestMts(videoId,playAuth);
+                let videoInfo={
+                    vid :playAuth.videoId,//媒体转码服务的媒体Id
+                    playauth:playAuth.playAuth//播放鉴权 [playauth参照](https://help.aliyun.com/document_detail/52833.html?spm=5176.doc51236.6.627.5gm5gf)
+                }
+                _self.initPlayer(videoInfo);
+            }else{
+                alert("get playAuth error");
+            }
+        });
+
+    }
+
+
+
+    render(){
+        let courseInfo=this.state.courseInfo;
+        let _self=this;
+        let dataSource=this.props.dataSource;
+        let photoName=Commom.formatServerPhoto(dataSource.courseAvatar);
+        return (
+            <Col>
+                {
+                    (dataSource.isVideo)
+                    ?
+                        <div id='c_player' className='prism-player'></div>
+                        :
+                        <div style={{height:'330px',lineHeight:'330px'}}>
+                            <img src={photoName.middlePhoto} className="img-responsive center-block" style={{float:"left",maxHeight:'330px',width:'100%'}}/>
+                            <div style={{position:'absolute', top:0,left:0,height:'330px',width:'100%',backgroundColor:'rgba(0,0,0,.5)'}}></div>
+                            <span className="glyphicon glyphicon-play-circle" aria-hidden="true" style={{position:'absolute',top:'90px',left:'40%',color:'white',fontSize:'100px'}}></span>
+                        </div>
+                }
+            </Col>
+        )
+    }
+}
+

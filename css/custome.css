@@ -1,10 +1,10 @@
 
 .infoBox{
-    background-color: #fff;
-    -webkit-box-shadow: 0px 1px 2px #bbb;
+    /*background-color: #fff;*/
+   /* -webkit-box-shadow: 0px 1px 2px #bbb;
     -moz-box-shadow: 0px 1px 2px #bbb;
     box-shadow: 0px 1px 2px #bbb;
-    padding:10px;
+    padding:10px;*/
 }
 .chapter{
     margin-bottom:20px;

@@ -1,6 +1,10 @@
 /*
  * Timeline
 */
+
+.ant-notification{
+	z-index:99999;
+}
 .timeline,
 .timeline-group,
 .timeline :not(.timeline-group):not(.timeline-title){

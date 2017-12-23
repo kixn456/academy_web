@@ -20,13 +20,14 @@ export default class HomeMain extends Component {
 
     constructor(props) {
         super(props);
+        let loginFlag=Storage.get("loginFlag");
         this.state = {
             // loginModalVisible: false,
             // registerModalVisible:false,
             loginAndRegisterModal:false,
             showType:'login',
             regiserFlag:false,
-            loginFlag:false
+            loginFlag:loginFlag
         };
     }
     componentDidMount()
@@ -45,7 +46,6 @@ export default class HomeMain extends Component {
     initLogin()
     {
         let loginFlag=Storage.get("loginFlag");
-
         this.setState({
             loginFlag
         })
@@ -86,12 +86,12 @@ export default class HomeMain extends Component {
         this.setState({
             loginFlag:false
         })
-        console.log(location.href);
-            let currentUrl=location.href.toLowerCase();
-            if(currentUrl.indexOf("usercenter")>0 ||currentUrl.indexOf("teachcenter")>0|| currentUrl.indexOf("studycenter")>0)
-            {
-                location.href=basePath+"index.html";
-            }
+
+        let currentUrl=location.href.toLowerCase();
+        if(currentUrl.indexOf("usercenter")>0 ||currentUrl.indexOf("teachcenter")>0|| currentUrl.indexOf("studycenter")>0)
+        {
+            location.href=basePath+"index.html";
+        }
 
     }
 
@@ -99,7 +99,9 @@ export default class HomeMain extends Component {
     lisentLoginSuccess(){
         //登录成功后的回调
        Storage.set("loginFlag",true);
-        this.initLogin();
+       this.setState({
+           loginFlag:true
+       })
     }
 
     //注册成功后的回调
@@ -129,7 +131,7 @@ export default class HomeMain extends Component {
 
 
 
-                <HeaderNav loginFlag={state.loginFlag} logoutCallBack={()=>this.logout()} loginModalControl={()=>this.loginAndRegisterModalControl(true)}/>
+                <HeaderNav loginFlag={state.loginFlag}   logoutCallBack={()=>this.logout()} loginModalControl={()=>this.loginAndRegisterModalControl(true)}/>
                 <LoginAndRegisterModal
                     showType={state.showType}
                     loginFlag={state.loginFlag}

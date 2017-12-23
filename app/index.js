@@ -14,7 +14,9 @@ export const MainPage = React.createClass({
     render: function () {
         return (
             <div>
-              <HomeMain/>
+                <div className="headerTop">
+                    <HomeMain/>
+                </div>
                     <Grid style={{position:'relative',marginTop:'60px'}}>
                         <HomeClassify/>
                     </Grid>

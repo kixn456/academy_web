@@ -12,7 +12,7 @@
 import React, {Component} from 'react';
 import {Grid,Row,Col,Thumbnail} from "react-bootstrap";
 import * as StudyServer from '../../server/studyCenterServer';
-
+import Storage from '../../common/storeage';
 
 
 export default class TaskList extends Component {
@@ -27,7 +27,8 @@ export default class TaskList extends Component {
         this.initData();
     }
     initData(){
-        let userId=123;
+        let userInfo=Stroage.get("userInfo")
+        let userId=userInfo.userId;
         let _self=this;
         StudyServer.getQuestionListWithUser(userId,function(data){
 

@@ -20,7 +20,7 @@ const LOGIN_INFO={
 const LOGINID_TYPE={
         email:1,//email
         phone:2,//电话登录
-        userid:3//uid登录
+    userId:3//uid登录
 };
 
 //客户端类型
