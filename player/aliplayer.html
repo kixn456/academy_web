@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"   content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"/>
+    <title>Insert title here</title>
+    <link rel="stylesheet" href="https://g.alicdn.com/de/prismplayer/2.5.0/skins/default/aliplayer-min.css" />
+    <script src="../js/jquery.min.js"></script>
+    <script  src="https://g.alicdn.com/de/prismplayer/2.5.0/aliplayer-h5-min.js"></script>
+</head>
+<body>
+<div  style="margin:0px auto; text-align:center;background:url(../images/timg.jpg);background-size: 100%;">
+    <div id='J_prismPlayer' className='prism-player'></div>
+</div>
+</body>
+<script>
+    var player =null;
+
+    $(function(){
+        var parmas=GetRequest();
+        console.log("888888888888")
+        //initPlayer();
+       initPlayVideo(parmas);
+        console.log("9999999999")
+    })
+
+
+    function initPlayer(vid,playauth){
+        player =new Aliplayer({
+            id: 'J_prismPlayer',
+            width: '100%',
+            autoplay: true,
+            vid : vid,
+            playauth :playauth,
+            cover: 'http://liveroom-img.oss-cn-qingdao.aliyuncs.com/logo.png'
+        },function(player){
+            console.log(player);
+            console.log('播放器创建好了。')
+        });
+    }
+    function endedHandle()
+    {
+        var newPlayAuth = "";
+       // player.replayByVidAndPlayAuth(vid,newPlayAuth);
+    }
+
+    function initPlayVideo() {
+        var videoInfo={
+            videoId:"48e075adb81b4107b3fc2e179f8b6008"
+        };
+        $.ajax({
+            url:'http://www.chunzeacademy.com:8080/vod/requestPlayAuth',
+            type:'POST',
+            data:JSON.stringify(videoInfo),
+            contentType:'application/json;charset=UTF-8',
+            async:true,
+            success:function(data){
+               var videoInfo=data.responseInfo;
+               console.log(videoInfo.videoId);
+                initPlayer(videoInfo.vid,videoInfo.playAuth);
+            },
+            error:function(){
+            }
+
+        })
+    }
+
+
+
+
+
+
+
+
+    function GetRequest(params) {
+        var url =decodeURI(decodeURI( location.search)); //获取url中"?"符后的字串
+        if(params){
+            url=params;
+        }
+
+        var theRequest = new Object();
+        if (url.indexOf("?") != -1) {
+            let  str = url.substr(1);
+            let strs = str.split("&");
+            for(var i = 0; i < strs.length; i ++) {
+                theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+            }
+        }
+
+        return theRequest;
+    }
+
+</script>
+</html>

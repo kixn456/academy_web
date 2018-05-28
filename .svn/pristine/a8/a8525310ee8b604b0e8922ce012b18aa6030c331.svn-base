@@ -1,0 +1,268 @@
+/**
+ * Created by Administrator on 2017/10/20.
+ */
+
+import React, {Component} from 'react';
+import {Grid,Row,Col,Thumbnail,Image,Button,Pagination} from "react-bootstrap";
+import * as CourseServer from '../../server/courseCenterServer';
+import {ClassList} from '../../testData/classData';
+import * as Commom from '../../public/commom/commom';
+import CourseItem from '../../home/cousrse/courseItem';
+const basePath=Commom.getRootPath();
+
+
+
+const filterList=[{name:'全部',value:2},{name:'免费',value:1},{name:'收费',value:0}];
+const orderByList=["综合排序","好评率","人气"];
+
+export default class CourseList extends Component {
+    constructor(props) {
+        super(props);
+        let parmaster=Commom.GetRequest();
+        let keyword=parmaster.keyword;
+        let category=this.findCategoryNameWithId(parmaster.id);
+        let categoryId=(parmaster.id!="")?parmaster.id:"";
+        this.state={
+            courseClassList:ClassList,
+            childList:ClassList[0].child,
+            courseList:[],
+            activeLiIndex:{
+                parent:0,
+                child:0,
+                orderBy:0,  //0综合　1好评　2人气
+            },
+            searchInfo:{
+                keyword:keyword,
+                category:categoryId,
+                pageNum:1,
+                pageSize:10,
+                pages:1,//总页码
+                size:10,//总条数
+                fitPeople:'',
+                difficultyLevel:'',
+                priceRange:'',
+                isFree:2　　　//0收费　1：免费　2：全部
+            }
+        }
+    }
+    componentDidMount(){
+        this.initData();
+    }
+    initData(){
+        let searchInfo=this.state.searchInfo;
+        let _self=this;
+        console.log(searchInfo);
+
+    CourseServer.getCourseListBySearch(searchInfo,function(code,data){
+        let newData=data;
+        let pageInfo={
+            pageSize:10,
+            pages:((newData.totalPages%10)==0)?newData.totalPages/10:(newData.totalElements<10)?1:Math.floor(newData.totalElements/10)+1,
+        }
+        let page=_self.state.searchInfo;
+        let newPage=Object.assign(page,pageInfo);
+        _self.setState({
+            courseList:newData.content,
+            searchInfo:newPage
+
+        })
+    },function(e){
+        console.log("error");
+    })
+}
+
+    findCategoryNameWithId(id)
+    {
+        let index=id%1000;
+        let category="";
+        for(var i=0; i<ClassList.length; i++)
+        {
+
+            if(index==0)
+            {
+                if(id==ClassList[i].id)
+                {
+                    category=ClassList[i].name;
+                    break;
+                }
+            }else{
+                let childList=ClassList[i].child;
+                for(var j=0;j<childList.length;j++)
+                {
+                    if(childList[j].id==id)
+                    {
+                        category=ClassList[i].name+","+childList[j].name;
+                        break;
+                    }
+                }
+
+            }
+
+        }
+        return category;
+    }
+
+handleSelect(pageNum){
+
+    let searchInfo=this.state.searchInfo;
+    searchInfo.pageNum=pageNum;
+    this.setState({
+        searchInfo:searchInfo
+    },()=>{this.initData()})
+}
+
+changeChild(index){
+    let courseClassList=this.state.courseClassList;
+    let activeLiIndex=this.state.activeLiIndex;
+    activeLiIndex.parent=index;
+    this.setState({
+        activeLiIndex,
+        childList:courseClassList[index].child
+    },()=>{ this.initData();})
+
+}
+chooseItemCategory(index){
+    let activeLiIndex=this.state.activeLiIndex;
+    activeLiIndex.child=index;
+    this.setState({
+        activeLiIndex
+    })
+    this.initData();
+}
+    changeFilte(name,value,item){
+        let activeLiIndex=this.state.activeLiIndex;
+        let searchInfo=this.state.searchInfo;
+        let courseClassList=this.state.courseClassList;
+        let childList=this.state.childList;
+        activeLiIndex[name]=value;
+        //如果有传入参数对象，说明是类别查询
+        if(item){
+            if(name=="parent" )
+            {
+                activeLiIndex["child"]=0;
+                childList=courseClassList[value].child;
+            }
+            searchInfo.category=item.id;
+        }else{
+            searchInfo[name]=value;
+        }
+        this.setState({
+            activeLiIndex,
+            searchInfo,
+            childList
+        },()=>{ this.initData();})
+    }
+
+    renderChildItem(){
+        let _self=this;
+        let activeLiIndex=_self.state.activeLiIndex;
+        let courseClassList=this.state.courseClassList;
+        let childItemList=[];
+            courseClassList.map(function(item,index){
+                let className=(activeLiIndex.parent==index)?"activeLi":"";
+                let childItem=<li className="menuLi" key={index}  onClick={()=>_self.changeFilte('parent',index,item)}  >
+                    <a href="#" className={className}>{item.name}</a>
+                </li>;
+                childItemList.push(childItem);
+            })
+        return childItemList;
+
+    }
+
+    renderCourseChildItem(){
+        let courseList=this.state.courseList;
+        let courseListMap=[];
+        courseList.map(function(item,index){
+            let bet=index%10;
+            item.courseAvatar=(item.courseAvatar!=""&& !item.courseAvatar)?basePath+"images/courseImg/pic"+bet+".jpg":item.courseAvatar;
+            let newItem=<CourseItem dataSource={item} key={index} />
+                courseListMap.push(newItem);
+        })
+        return courseListMap;
+    }
+render() {
+    let courseList=this.state.courseList;
+    let courseClassList=this.state.courseClassList;
+    let childrenList=this.state.childList;
+    let _self=this;
+    let defaultImg="images/courseImg/product12.jpg";
+    let pageInfo=this.state.searchInfo;
+    let activeLiIndex=_self.state.activeLiIndex;
+    let homeAction=basePath+"index.html";
+    let parentName=activeLiIndex.parent;
+    let childName=activeLiIndex.child;
+
+        return (
+            <Grid style={{marginTop:'60px'}}>
+                <Col style={{padding:'20px 0px'}}>  <a href={homeAction}>首页</a>  > 课程列表> {courseClassList[parentName].name}>{childrenList[childName].name}</Col>
+                <Col xs={12} md={12} style={{background:'white',border:'1px solid #ccc',padding:'20px 0px'}}>
+                    <Col xs={12} md={12} style={{borderBottom:'1px solid #eee',paddingBottom:'10px'}}>
+                        <span style={{float:'left',paddingRight:'15px'}}>方向</span>
+                        <ul className="search_filter">
+                            { _self.renderChildItem()}
+                        </ul>
+                    </Col>
+                    <Col  xs={12} md={12} style={{marginTop:'10px'}}>
+                        <span style={{float:'left',paddingRight:'15px'}}>分类</span>
+                        <ul  className="search_filter">
+                            {
+                                childrenList.map(function(item,index){
+                                    let className=(activeLiIndex.child==index)?"activeLi":"";
+
+                                    return <li className="menuLi" key={index} onClick={()=>_self.changeFilte('child',index,item)}>
+                                        <a href="#" className={className}>{item.name}</a>
+                                    </li>
+                                })
+                            }
+                        </ul>
+                    </Col>
+                </Col>
+
+                    <Col  xs={12} md={12}  style={{marginTop:'10px',padding:'0'}}>
+                    <div className="courseFilte">
+                    <em className={activeLiIndex.orderBy==0?'colorGreen':''}  onClick={()=>_self.changeFilte('orderBy',0)}>综合排序</em>
+                     <span >
+                         {
+                             orderByList.map(function(item,index){
+                                 let className=activeLiIndex.orderBy==index?'colorGreen':'';
+                                 if(index>0){
+                                     return <a href="#" key={"orderBy_"+index} className={activeLiIndex.orderBy==1?'colorGreen':''} onClick={()=>_self.changeFilte('orderBy',index)}>{item}</a>
+                                 }
+                             })
+                         }
+
+                     </span>
+                    <span style={{float:'right'}}>
+                        {
+                            filterList.map(function(item,index){
+                                let className=pageInfo.isFree==item.value?'activeLi':'';
+                                return <a href="#" key={"filter_"+index} className={className}  onClick={()=>_self.changeFilte('isFree',item.value)}>{item.name}</a>
+                            })
+                        }
+                    </span>
+                    </div>
+                    </Col>
+                <Col xs={12} md={12} style={{padding:0,marginTop:'10px'}}>
+                    <div className="listWrap">
+                        {_self.renderCourseChildItem()}
+                    </div>
+                    <div style={{textAlign:'right'}}>
+                        {
+                            pageInfo.pages>1
+                            ?
+                                <Pagination
+                                    items={pageInfo.pages}
+                                    activePage={parseInt(pageInfo.pageNum)}
+                                    onSelect={this.handleSelect.bind(this)}
+                                />
+                                :
+                                null
+                        }
+
+                    </div>
+                </Col>
+            </Grid>
+        )
+    }
+
+}

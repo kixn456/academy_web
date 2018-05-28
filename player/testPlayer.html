@@ -1,0 +1,109 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge" >
+    <meta name="viewport"   content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"/>
+    <title>视频点播</title>
+    <link rel="stylesheet" href="//g.alicdn.com/de/prismplayer/2.5.0/skins/default/aliplayer-min.css" />
+    <script type="text/javascript" src="//g.alicdn.com/de/prismplayer/2.5.0/aliplayer-min.js"></script>
+    <script src="../js/jquery.min.js"></script>
+</head>
+<body>
+<div  id="J_prismPlayer"></div>
+<script>
+
+    var aliPlayer=null;
+    $(function(){
+        var parmas=GetRequest();
+        parmas={
+            videoId:"22ccf83612b14ab0944903a696ff2bd5"
+        }
+        initPlayVideo(parmas);
+    })
+
+
+    function initPlayer(videoId,playauth){
+
+        var width=$(window).width;
+        var height=$(window).height;
+        aliPlayer = new Aliplayer({
+                id: "J_prismPlayer",
+                isLive:false,
+                playsinline:true,
+                width:"100%",
+                height:"300px",
+                autoplay: true,
+                controlBarVisibility:"always",
+                useH5Prism:true,
+                useFlashPrism:false,
+                vid :videoId,
+                playauth :playauth,
+                skinLayout:[
+                    {"name":"controlBar","align":"blabs","x":0,"y":0,
+                        "children":[
+                            {"name":"progress","align":"tlabs","x":0,"y":0},
+                            {"name":"playButton","align":"cc"}
+                        ]
+                    },
+                    {"name":"bigPlayButton","align":"cc"},
+                    {"name":"H5Loading","align":"cc"}
+
+                ]
+            },function(player){
+                console.log("播放器创建了。");
+
+            }
+        );
+        aliPlayer.on("ended", playerEnd);
+    }
+
+    function playerEnd(){
+        var pass={
+            videoId:"dd4554ec52e24fd2a1dc0006f1fd962b"
+        };
+        initPlayVideo(pass);
+        console.log("播放结束")
+    }
+
+    function initPlayVideo(parmas) {
+        var videoInfo=parmas;
+        $.ajax({
+            url:'http://www.chunzeacademy.com:8080/vod/requestPlayAuth',
+            type:'POST',
+            data:JSON.stringify(videoInfo),
+            contentType:'application/json;charset=UTF-8',
+            async:true,
+            success:function(data){
+                var videoInfo=data.responseInfo;
+                if(aliPlayer!=null){
+                    aliPlayer.replayByVidAndPlayAuth(videoInfo.videoId,videoInfo.playAuth);
+                }else{
+                    initPlayer(videoInfo.videoId,videoInfo.playAuth);
+                }
+            },
+            error:function(){
+                console.log("888888")
+            }
+        })
+    }
+    function GetRequest(params) {
+        var url =decodeURI(decodeURI( location.search)); //获取url中"?"符后的字串
+        if(params){
+            url=params;
+        }
+
+        var theRequest = new Object();
+        if (url.indexOf("?") != -1) {
+            let  str = url.substr(1);
+            let strs = str.split("&");
+            for(var i = 0; i < strs.length; i ++) {
+                theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+            }
+        }
+
+        return theRequest;
+    }
+</script>
+</body>
+</html>

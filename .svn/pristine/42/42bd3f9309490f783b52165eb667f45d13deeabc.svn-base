@@ -1,0 +1,291 @@
+/**
+ * Created by Administrator on 2017/9/30.
+ */
+
+import React, {Component} from 'react';
+import { Form, Input, Col,Button,Select} from 'antd';
+
+
+import * as I18N from '../../../i18n/i18n_teachCenter';
+import {CoustomInput} from '../../../public/newInput';
+
+//import MyEditor from '../../../myEdit/index';
+//import MyEditor from '../../../myEdit/index';
+
+
+import ReactQuill from 'react-quill'; // ES6
+import 'react-quill/dist/quill.snow.css'; // ES6
+
+const FormItem = Form.Item;
+const Option = Select.Option;
+const { TextArea } = Input;
+
+
+class AddLessonDetail extends Component {
+    constructor(props) {
+        super(props);
+        let defaultState=this.initState();
+        defaultState=JSON.stringify(defaultState);
+        this.state={
+            courseInfo:JSON.parse(defaultState),
+            errorInfo:JSON.parse(defaultState),
+            errorClass:JSON.parse(defaultState)
+        }
+
+
+        this.fitPeopleList=["所有","初级","中级","高级"];
+
+    }
+
+    initState(){
+        let defaultState={
+            courseInfo:'',//简介
+            detail:'',
+            searchKeys:'',//标签
+            fitPeople:'',//适用人群
+            difficultyLevel:''//难度级别
+        };
+        return defaultState;
+    }
+
+    componentDidMount() {
+
+        let courseInfo = this.props.dataSource;
+        if (courseInfo) {
+            this.setState({
+                courseInfo: courseInfo
+            })
+        }
+
+    }
+    handleChangeEdit(html){
+        let courseInfo=this.state.courseInfo;
+        courseInfo.detail=html;
+        this.setState({
+            courseInfo:courseInfo
+        })
+    }
+    changeHandle(e){
+        let courseInfo=this.state.courseInfo;
+        let name=e.target.name;
+        let value=e.target.value;
+
+        let checkInfoObject=this.checkUserInputValue(name,value,courseInfo);
+        this.setCourseInfo(checkInfoObject);
+    }
+    changeSelectedHandle(obj){
+        let courseInfo=this.state.courseInfo;
+            let name=obj.name;
+            let value=obj.value;
+            let checkInfoObject=this.checkUserInputValue(name,value,courseInfo);
+            this.setCourseInfo(checkInfoObject);
+    }
+    checkUserInputValue(name,value,courseInfo){
+        let errorClass={};
+        let errorInfo={};
+
+        let _self=this;
+        let checkFlag=false;
+        let className="has-error";
+        courseInfo[name]=value;
+
+        switch(name){
+            case 'courseInfo':
+            case 'detail':
+                 checkFlag=_self.checkCourseInto(value);
+                 if(checkFlag){
+                     errorInfo[name]="课程描述只能输入5－1000个字符";
+                     errorClass[name]="has-error";
+                 }else{
+                     errorClass[name]="has-success";
+                 }
+
+                break;
+
+            case 'searchKeys':
+                break;
+            case 'fitPeople':
+                break;
+
+            case 'difficultyLevel':
+                break;
+        }
+
+        return {
+            errorClass,
+            errorInfo,
+            courseInfo
+        };
+    }
+    submitBeforCheck(courseInfo){
+
+        let _self=this;
+        let checkAllFlag=[];
+        for(var key in courseInfo){
+            let checkResult=_self.checkUserInputValue(key,courseInfo[key],courseInfo);
+            if(checkResult.errorClass[key]=="has-error"){
+                checkAllFlag.push(key);
+            }
+        }
+        return checkAllFlag;
+    }
+    checkCourseInto(str){
+        //15-100个字符
+        let checkRegMath=/^[A-Za-z0-9_\-\u4e00-\u9fa5]{5,1000}$/;
+        if(str.length>1000 || str.length<5){
+            return true
+        }else{
+            return false;
+        }
+    }
+
+    addCourseStepSubmit(){
+        let courseInfo=this.state.courseInfo;
+        let errorClass=this.state.errorClass;
+        let checkErrorArray=this.submitBeforCheck(courseInfo);
+        console.log("错误长度检测："+checkErrorArray.length);
+        console.log(checkErrorArray);
+        console.log(errorClass);
+        if(checkErrorArray.length>0){
+            //如果长度大于0表示有错误
+            for(var i=0;i<checkErrorArray.length; i++)
+            {
+                let errorKey=checkErrorArray[i];
+                errorClass[errorKey]="has-error";
+            }
+            this.setState({
+                errorClass:errorClass
+            })
+
+
+
+        }else{
+            console.log("校验通过");
+            this.props.submitCallBack(courseInfo);
+        }
+    }
+
+
+    previousStep(){
+        let courseInfo=this.state.courseInfo;
+        this.props.returnCallBack(courseInfo);
+    }
+
+    setCourseInfo(stateObj){
+        this.setState({
+            courseInfo:stateObj.courseInfo,
+            errorClass:stateObj.errorClass,
+            errorInfo:stateObj.errorInfo
+        })
+
+    }
+    render() {
+
+        const formItemLayout = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 6 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 14 },
+            },
+        };
+        let defaultTime=new Date();
+        let errorClass=this.state.errorClass;
+        let courseInfo=this.state.courseInfo;
+        let fitPeopleList=this.fitPeopleList;
+        return (
+            <Col>
+            <Form  style={{marginTop:20}}>
+                <Col span={24} className='formItem_bottom'>
+                    <Col span={6} className="ant-form-item-required"  style={{textAlign:'right'}} >
+                        {I18N.I18N_TEATCH_CENTER.CLASS_courseInfo}：
+                    </Col>
+                    <Col span={14} className={errorClass.courseInfo}>
+                        <Input size={'large'} maxLength={'64'} name='courseInfo' value={courseInfo.courseInfo}  placeholder={I18N.I18N_TEATCH_CENTER.CLASS_courseInfo_tip}  onChange={(e)=>this.changeHandle(e)} />
+                    </Col>
+                </Col>
+
+                <Col  span={24}>
+                <CoustomInput
+                    formItemLayout={formItemLayout}
+                    name='searchKeys'
+                    label={I18N.I18N_TEATCH_CENTER.CLASS_searchKeys}
+                    validateStatus={errorClass.searchKeys}
+                    onChange={(e)=>this.changeHandle(e)}
+                    require={true}
+                    placeholder={I18N.I18N_TEATCH_CENTER.CLASS_searchKeys}
+                    errorMsg={I18N.I18N_TEATCH_CENTER.CLASS_TITLE_TIP}
+                    defaultValue={courseInfo.searchKeys}
+                />
+
+                </Col>
+                <Col span={24} className='formItem_bottom'>
+                    <Col className="text-right" span={6}  >
+                        {I18N.I18N_TEATCH_CENTER.CLASS_fitPeople}：
+                    </Col>
+                    <Col span={14} >
+                        <Select name="fitPeople" size={'large'} value={courseInfo.fitPeople}  onSelect={(value)=>this.changeSelectedHandle({"name":'fitPeople',"value":value})}>
+                            {
+                                fitPeopleList.map(function(item,index){
+                                    return  <Option value={item} key={index}>{item}</Option>
+                                })
+                            }
+                        </Select>
+                    </Col>
+                </Col>
+
+
+
+           {/*     <CoustomInput
+
+                    formItemLayout={formItemLayout}
+                    name='fitPeople'
+                    label={I18N.I18N_TEATCH_CENTER.CLASS_fitPeople}
+                    validateStatus={errorClass.fitPeople}
+                    onChange={(e)=>this.changeHandle(e)}
+                    require={true}
+                    placeholder={I18N.I18N_TEATCH_CENTER.CLASS_fitPeople_tip}
+                    errorMsg={I18N.I18N_TEATCH_CENTER.CLASS_TITLE_TIP}
+                    defaultValue={courseInfo.fitPeople}
+                />*/}
+
+                <Col span={24}>
+
+                <Col span={6} className="ant-form-item-required"  style={{textAlign:'right'}}>
+                    课程详情：
+                </Col>
+                <Col span={14} style={{minHeight:'300px'}} className={errorClass.detail}>
+                    <ReactQuill value={courseInfo.detail}
+                              onChange={this.handleChangeEdit.bind(this)}
+                    />
+                </Col>
+                </Col>
+{/*
+                <CoustomInput
+                    formItemLayout={formItemLayout}
+                    name='detail'
+                    id="editor"
+                    label={I18N.I18N_TEATCH_CENTER.CLASS_detail}
+                    validateStatus={errorClass.detail}
+                    defaultValue={courseInfo.detail}
+                    onChange={(e)=>this.changeHandle(e)}
+                    rows={8}
+                    require={true}
+                    placeholder={I18N.I18N_TEATCH_CENTER.CLASS_detail_tip}
+                    errorMsg={I18N.I18N_TEATCH_CENTER.CLASS_detail_tip}
+                />*/}
+
+
+                <Col span={24} className='formItem_bottom' offset={6} style={{marginTop:'30px'}}>
+                    <Button type="primary"  onClick={()=>this.previousStep()} style={{marginRight:'10px'}}>上一步</Button>
+                    <Button type="primary"  onClick={()=>this.addCourseStepSubmit()}>下一步</Button>
+                </Col>
+            </Form>
+            </Col>
+        );
+    }
+
+}
+export const AddLessonDetailInfo = Form.create()(AddLessonDetail);

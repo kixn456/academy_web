@@ -1,0 +1,40 @@
+{
+  result: 0,
+  responseInfo: {
+    lists: [
+      {
+        id: 781,
+        //对应的广告位ＩＤ，或进广告ＩＤ
+        title: 'paython 面向初级开',
+        discription: '全新的面向对象语言设计',
+        imgUrl: 'images/courseImg/product12.jpg',
+        linkUrl: 1000252,
+        //可以填写商品ID,分类ＩＤ，或者ＵＲＬ
+        linkType: 0,
+        // linkeType:0 表示商品　1:分类，2：url　独立宣传页
+        startTime: '2017/12/25 11:00',
+        expireTime: '2027/12/25 12：00'
+      },
+      {
+        id: 782,
+        title: 'paython 面向初级开',
+        discription: '全新的面向对象语言设计',
+        imgUrl: 'images/courseImg/product13.jpg',
+        linkUrl: 1000252,
+        linkType: 0,
+        startTime: '2017/12/25 11:00',
+        expireTime: '2027/12/25 12：00'
+      },
+      {
+        id: 783,
+        title: 'paython 面向初级开',
+        discription: '全新的面向对象语言设计',
+        imgUrl: 'images/courseImg/product14.jpg',
+        linkUrl: 1000252,
+        linkType: 0,
+        startTime: '2017/12/25 11:00',
+        expireTime: '2027/12/25 12：00'
+      }
+    ]
+  }
+}

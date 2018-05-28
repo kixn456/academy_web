@@ -1,0 +1,438 @@
+/**
+ * Created by Administrator on 2017/10/12.
+ *@description
+ *@author
+ *@out
+ */
+
+import React, {Component} from 'react';
+import {Steps,Col,Upload,notification,Icon,Button,Message} from 'antd';
+
+import '../../../css/timeline.css';
+
+import  * as ClassData from '../../testData/classData';
+import {AddLessonBasicInfo} from './add/addLessonBasicInfo';
+import {AddLessonDetailInfo} from './add/addLessonDetail';
+import {ChapterList} from './add/chapterList';
+import * as Common from '../../public/commom/commom';
+import * as CourseServer from '../../server/courseCenterServer';
+import  * as TeachCenterServer from '../../server/teachCenterServer';
+import Storage from '../../common/storeage';
+const ClassList=ClassData.ClassList;
+
+const EMPTY_REQUEST={
+    EMPTY_ORDERID:'000000',
+    EMPTY_COURSEID:'000000'
+};
+
+const AddLessonSteps=[
+    {
+        setp:1,
+        title:'课程基本信息'
+    },
+    {
+        setp:2,
+        title:'课程描述信息'
+    },
+    {
+        setp:3,
+        title:'课程章节设置'
+    }
+];
+
+const openNotification = (id) => {
+    notification.open({
+        message: '课程保存成功',
+        description: '课程id:'+id+"已发布，请前往课程中心查看",
+        icon: <Icon type="smile-circle" style={{ color: '#108ee9' }} />,
+    });
+};
+
+export default class AddLessonInfo extends Component {
+    constructor(props) {
+        super(props);
+        let stepData=this.initDefaultData();
+        let newParmas= this.initRequst();//获取参数
+       this.state={
+           currentStep:0,
+           stepSource:Common.clone(stepData),
+           orderId:'',
+           pageParmas:Common.clone(newParmas),
+           isCourse:false,//是否是课程编辑
+           isModify:false,//是否编辑，
+           draftId:Common.clone(newParmas).orderId
+       }
+
+    }
+
+    componentDidMount(){
+       this.initCourseStatus();
+
+    }
+
+    initCourseStatus(){
+
+        let pageParmas=this.state.pageParmas;
+        let isCourse=this.state.isCourse;
+        let isModify=this.state.isModify;
+        //orderId==000000 表示来编辑来源于草稿箱
+        //判断是否是草稿。是草稿
+        if(pageParmas.orderId!=EMPTY_REQUEST.EMPTY_ORDERID)
+        {
+            isCourse=false;
+            isModify=true;
+            this.initContextData(pageParmas.orderId);
+            //来源于课程
+        }else if(pageParmas.courseId!=EMPTY_REQUEST.EMPTY_COURSEID){
+            isCourse=true;
+            isModify=true;
+            this.initData(pageParmas.courseId);
+        };
+
+        this.setState({
+            isCourse,
+            isModify
+        })
+    }
+
+
+    initContextData(orderId){
+        let orderKeyList=["course"];
+        let _self=this;
+        let stepData=_self.state.stepSource;
+
+
+
+        TeachCenterServer.getContextData(orderId,orderKeyList,function(code,data){
+
+                let newData=JSON.parse(data);
+                let course=JSON.parse(newData.course);
+                let courseClass=JSON.parse(newData.courseClass);
+                let basicInfo=Object.assign(stepData[0],course);
+                    basicInfo.courseChapterList=courseClass;
+                let newStepData=_self.initFarmatData(basicInfo);
+
+                _self.setState({
+                    // orderId:orderId,
+                    stepSource:Common.clone(newStepData)
+                })
+
+
+        },function(e){
+            console.log(e);
+        })
+    }
+
+
+    initRequst(){
+        let params=this.props.params.id;
+        let courseId=EMPTY_REQUEST.EMPTY_COURSEID;
+        let orderId=EMPTY_REQUEST.EMPTY_ORDERID;
+        if(!Common.isEmptyObject(params))
+        {
+            let parmasList=params.split("&");
+            courseId=parmasList[0].split("=")[1];
+            orderId=parmasList[1].split("=")[1];
+        }
+
+        let newCourseParmas={
+            courseId,
+            orderId
+        };
+
+        return newCourseParmas;
+
+    }
+    /**初始化默认数据模型*/
+    initDefaultData(){
+        let _self=this;
+        let courseChapterList=[];
+        let basicInfo={
+            courseId:"",
+            owner:"",
+            title:"",
+            category:"",
+            courseAvatar:'',
+            expireDate:"",
+            courseChapter:[],
+            originalPrice:"0.0",
+            realPrice:"0.0"
+        };
+
+        let courseDetail={
+            courseInfo:"",
+            detail:"", //课程详情
+            searchKeys:"",
+            fitPeople:"",
+            difficultyLevel:""
+        };
+
+        let stepSource=[
+            basicInfo,
+            courseDetail,
+            courseChapterList
+        ];
+
+        return stepSource;
+
+
+    }
+    initData(){
+        let _self=this;
+        let orderId=_self.state.pageParmas.courseId;
+        //这里需要请求新数据；
+        CourseServer.getCourseDetailByAjax(orderId,function(code,data){
+            if(code!=0){
+                alert("系统异常:"+code);
+            }else{
+                let myData=data;
+                let newData=_self.initFarmatData(myData);
+                let orderId=myData.courseId;
+                _self.setState({
+                    // orderId:orderId,
+                    stepSource:Common.clone(newData)
+                })
+            }
+        },function(e){
+            console.log("错误了");
+        })
+    }
+
+
+    initFarmatData(myData){
+        let _self=this;
+        let courseChapterList=myData.courseChapterList||[];
+        let courseChapte=JSON.parse(myData.courseChapter);
+        let category=JSON.parse(myData.category);
+        let newChildList=[];
+
+        if(typeof(JSON.parse(myData.category))!="object")
+        {
+            category=_self.findSelectedIndex(JSON.parse(myData.category),ClassList);
+            category.child={id:category.child[0].id,name:category.child[0].name};
+        }
+
+        let basicInfo={
+            courseId:myData.courseId,
+            title:myData.title,
+            category:category,
+            courseAvatar: myData.courseAvatar,
+            expireDate: myData.expireDate,
+            originalPrice: myData.originalPrice,
+            realPrice:myData.realPrice,
+            courseChapter:courseChapte
+        };
+
+        let courseDetail={
+            courseInfo:myData.courseInfo,
+            detail:myData.detail,
+            searchKeys: myData.searchKeys,
+            fitPeople:myData.fitPeople,
+            difficultyLevel:myData.difficultyLevel
+        };
+        let stepSource=[
+            basicInfo,
+            courseDetail,
+            courseChapterList
+        ];
+
+        return stepSource;
+    }
+
+    //查找select　分类联动数据
+    findSelectedIndex(id,data){
+
+        let newData={};
+
+        for(var i=0;i<data.length; i++){
+            if(data[i].id==id){
+                newData=data[i]
+                break;
+            }
+        }
+        if(Common.isEmptyObject(newData))
+        {
+            newData={
+                id:data[0].id,
+                name:data[0].name,
+                child:data[0].child
+            }
+        }
+        return newData;
+    }
+
+
+//点击步聚切换
+    stepClick(currentStep){
+        this.setState({
+            currentStep:currentStep
+        })
+    }
+
+    //返回上一步
+    previousStep(stepData){
+        let step=this.state.currentStep;
+        this.stepClick(step-1);
+    }
+    //记录当前子步要提交的数据
+    setStepData(step,data,isPublish=false){
+
+
+        let _self=this;
+        let dataSource=this.state.stepSource;
+        let selfStep=parseInt(step);
+        let newStep=((selfStep+1)>2)?selfStep:selfStep+1;
+        dataSource[selfStep]=data;
+
+        let newChapterList=TeachCenterServer.exchangeCourseClass(dataSource[2]);
+        let pageParmas=Object.assign({},_self.state.pageParmas);
+        let orderId=pageParmas.orderId;
+        let  courseId=pageParmas.courseId;
+        let isModify=_self.state.isModify;
+        let isCourse=_self.state.isCourse;
+
+
+        //dataSource[0].courseChapter=newChapterList.chapterInfo;
+        if(isPublish){
+            TeachCenterServer.submitOrderInfo(orderId,function(code,data){
+                if(code==0){
+                    openNotification(data.orderId);
+                    setTimeout(function(){
+                        location.href="#/CourseMananger";
+                    },50);
+                }else{
+                    alert("发布失败"+code);
+                }
+            })
+        }else{
+                //如果步为1表示要提交课程信息；
+                if(selfStep>=1){
+                    this.createNewDraftAndOrderId(newStep,dataSource,orderId,courseId);
+                }else{
+                    this.setState({
+                        currentStep:newStep,
+                        stepSource:dataSource
+                    })
+                }
+        }
+    }
+
+    //创建草稿
+    createNewDraftAndOrderId(step,stepData,orderId,courseId){
+        let userInfo=Storage.get("userInfo");
+        let userId=userInfo.userId;
+        let _self=this;
+        let isCourse=_self.state.isCourse;
+        let orderInfo=stepData[0]; //深度clone
+        orderInfo=Object.assign(orderInfo,stepData[1]);
+
+        TeachCenterServer.createNewDraft(userId,orderId,courseId,orderInfo,function(code,data){
+            if(code==0){
+               _self.submitOrderInfo(data,step,stepData);
+            }
+        })
+    }
+
+    submitOrderInfo(orderId,step,stepData){
+        let _self=this;
+        let orderInfo=_self.state.stepSource[0]; //深度clone
+        orderInfo=Object.assign(orderInfo,_self.state.stepSource[1]);
+
+        let courseClass=_self.state.stepSource[2];
+        if(courseClass.length>0){
+            let newChapterList=TeachCenterServer.exchangeCourseClass(courseClass);
+            orderInfo.courseChapter=newChapterList.chapterInfo;
+        }
+        let newOrderInfo={courseInfo:orderInfo,courseClass:courseClass};
+        let pageParmas=_self.state.pageParmas;
+        //保存数据
+
+        TeachCenterServer.createOrderInfoByAjax(orderId,newOrderInfo,false,function(code,data){
+            if(code==0){
+                pageParmas.orderId=orderId;
+                //如果是创建新课程，返回的草稿Ｉd需要给课程id
+               // console.log("===是否修改==="+_self.state.isModify+"===是否修改课程==="+_self.state.isCourse);
+                if(!_self.state.isModify && !_self.state.isCourse)
+                {
+                    pageParmas.courseId=orderId;
+                }
+
+                console.log("当前步："+step);
+                _self.setState({
+                    pageParmas:pageParmas,
+                    currentStep:step,
+                    stepSource:stepData
+                })
+            }
+        },function(e){
+            alert("服务器异常！")
+
+        })
+    }
+
+    //子步提交数据　参数:当前步子，步子数据；
+    childStepSubmit(step,stepData){
+        let oldStep=parseInt(step);
+        let newStep=oldStep+1;
+        this.setStepData(oldStep,stepData);
+    }
+
+    //订单发布保存，
+    orderPublish(step,stepData){
+        let oldStep=parseInt(step);
+        let newStep=oldStep+1;
+        this.setStepData(oldStep,stepData,true);
+    }
+
+    render() {
+        let currentStep=this.state.currentStep;
+        let stepData=this.state.stepSource;
+        let isModify=this.state.isCourse;
+
+        return (
+            <Col style={{background:'white',overflow:'hidden',marginLeft:'14px', padding:'30px',minHeight:'400px'}}>
+
+                <div style={{width:'70%',margin:'0px auto',marginLeft:'10px'}}>
+                    <Steps current={this.state.currentStep}>
+                        {
+                            AddLessonSteps.map(function(item,index){
+                                return  <Steps.Step key={index} title={item.title} />
+                            })
+                        }
+
+                    </Steps>
+                </div>
+
+                <div>
+                    {
+                        (currentStep==0)
+                            ?
+                            <AddLessonBasicInfo dataSource={stepData[currentStep]}  submitCallBack={(stepData)=>this.childStepSubmit(currentStep,stepData)}/>
+                            :
+                            (currentStep==1)
+                                ?
+                            <AddLessonDetailInfo dataSource={stepData[currentStep]}  returnCallBack={(data)=>this.previousStep(data)} submitCallBack={(stepData)=>this.childStepSubmit(currentStep,stepData)}/>
+                            :
+                        (currentStep==2)
+                            ?
+                            <ChapterList
+                                isModify={isModify}
+                                isFree={(parseInt(stepData[0].originalPrice)==0)?true:false}
+                                realPrice={stepData[0].realPrice}
+                                chapterList={stepData[0].courseChapter}
+                                courseId={stepData[0].courseId} 　
+                                dataSource={stepData[currentStep]}
+                                returnCallBack={(data)=>this.previousStep(data)}
+                                orderPublish={(stepData)=>this.orderPublish(currentStep,stepData)}
+                                submitCallBack={(stepData)=>this.childStepSubmit(currentStep,stepData)}/>
+                        :
+                        null
+                    }
+
+                </div>
+
+            </Col>
+        )
+    }
+
+}
